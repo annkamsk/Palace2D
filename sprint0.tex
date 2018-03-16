@@ -4,7 +4,7 @@
 
 \begin{document}
 
-\title{Sprint 0}
+\title{Palace 2D}
 
 \author{Mateusz Biegański, Anna Kramarska, Michał Sarzyński, Magda Suchodolska}
 \maketitle
@@ -20,16 +20,20 @@ Gdy gracz nie trafi klockiem w poprzedający, gra się kończy, a wynikiem gry j
 \begin{enumerate}
 \item\textbf{Gracz:}
   \begin{itemize}
-  \item Bierze udział w każdej rozgrywce
+  \item Bierze udział w każdej grze
   \item Może sprawdzić 10 dotychczas najlepszych wyników
-  \item Po każdej rozgrywce może wprowadzić uzyskany wynik i swój pseudonim do rankingu
+  \item Po każdej grze może wprowadzić uzyskany wynik i swój pseudonim do rankingu
   \end{itemize}
 \end{enumerate}
 
 \section{Funkcjonalność}
 \begin{enumerate}
-\item Uruchomienie aplikacji na komputerze z systemem Linux
 \item Rozpoczęcie nowej gry i prowadzenie jej do momentu przegranej lub osiągnięcia maksymalnego wyniku
+\item Wyświetlanie planszy z polem, na które mają spaść klocki
+\item Sekwencyjne wysuwanie się klocków z prawej i lewej strony ekranu
+\item Umieszczanie nowego klocka na szczycie wieży poprzez wciśnięcie spacji
+\item Odcinanie części klocka, która nie zmieściła się w swoim polu docelowym
+\item Przesuwanie widoku wieży w górę wraz z dokładaniem klocków
 \item Zrestartowanie gry po zakończeniu poprzedniej
 \item Przejście do rankingu najlepszych wyników
 \item Wprowadzenie wyniku do rankingu po zakończeniu rozgrywki
@@ -40,15 +44,16 @@ Gdy gracz nie trafi klockiem w poprzedający, gra się kończy, a wynikiem gry j
 Planujemy następujący harmonogram:
 \begin{itemize}
 \item\textbf{Sprint 0} - 12.03 - Wizja, harmonogram, wybór technologii
-\item\textbf{Sprint I} - 04.04 - Specyfikacja wymagań (wersja pierwsza), kod wykonywalny: plansza z jednym klockiem
-\item\textbf{Sprint II} - 25.04 - Specyfikacja wymagań (dopracowanie), architektura systemu (wersja pierwsza), kod wykonywalny: budowanie wieży
-\item\textbf{Sprint III} - 09.05 - Architektura systemu (dopracowanie), kod wykonywalny: dostosowanie okna
-\item\textbf{Sprint IV} - 23.05 - Plakat (wersja pierwsza), kod wykonywalny: grafika
-\item\textbf{Sprint V} - 30.05 - Plakat (dopracowanie), prezentacja, kod wykonywalny: tablica najlepszych wyników
+\item\textbf{Sprint I} - 04.04 - Specyfikacja wymagań (wersja pierwsza), kod wykonywalny: rozpoczęcie nowej gry, plansza z jednym klockiem
+\item\textbf{Sprint II} - 25.04 - Specyfikacja wymagań (dopracowanie), architektura systemu (wersja pierwsza), kod wykonywalny: budowanie wieży (lądowanie klocków, odcinanie), kończenie gry
+\item\textbf{Sprint III} - 09.05 - Architektura systemu (dopracowanie), kod wykonywalny: przesuwanie widoku wieży
+\item\textbf{Sprint IV} - 23.05 - Plakat (wersja pierwsza), kod wykonywalny: grafika, melodia
+\item\textbf{Sprint V} - 30.05 - Plakat (dopracowanie), prezentacja, kod wykonywalny: ranking 10 najlepszych wyników, możliwość zapisu własnego wyniku
 \end{itemize}
 
 \section{Technologie}
 \begin{itemize}
+\item\textbf{System:} Linux
 \item\textbf{Język:} Java
 \item\textbf{Framework:} libGDX
 \end{itemize}
