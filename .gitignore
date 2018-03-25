@@ -26,3 +26,7 @@ build/
 
 #Macowy plik
 .DS_Store
+
+sprint*.pdf
+sprint*.aux
+
