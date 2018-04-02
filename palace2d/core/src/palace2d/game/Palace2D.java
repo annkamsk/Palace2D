@@ -14,15 +14,9 @@ public class Palace2D extends ApplicationAdapter {
 	private Texture block1, background;
 	private State state;
 
-	private enum State {
-		win,
-		lose,
-		play
-	}
-
 
 	private void newGame() {
-		state = State.play;
+		state = new PlayState(batch);
 	}
 
 	@Override
@@ -46,14 +40,7 @@ public class Palace2D extends ApplicationAdapter {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(background, 0, 0);
-		if (state == State.play) {
-			batch.draw(block1,111,10);
-		} else if (state == State.lose) {
-			// batch.draw(lose, 0,0);
-		} else if (state == State.win) {
-			// batch.draw(win,0,0);
-		}
-
+		state.draw();
 		batch.end();
 	}
 
