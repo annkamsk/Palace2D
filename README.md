@@ -1,9 +1,10 @@
 # IOTower
 
-## Generowanie plików PDF
+## Generowanie dokumentacji
 
 ```bash
+cd dokumentacja
 make
 ```
 
-Wygenerowany plik pojawi się w katalogu `build`.
+Wygenerowane pliki pojawią się w podkatalogach katalogi `dokumentacja`.
