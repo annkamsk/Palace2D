@@ -20,7 +20,6 @@ public class Block extends Actor {
         width = tex.getWidth();
         height = tex.getHeight();
         spritePos(sprite.getX(), sprite.getY());
-        defineActions();
     }
 
     public void spritePos(float x, float y) {
@@ -33,9 +32,6 @@ public class Block extends Actor {
         super.act(delta);
     }
 
-    private void defineActions() {
-
-    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
