@@ -6,12 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.*;
 
-import java.util.Iterator;
-
 public class Block extends Actor {
     private Sprite sprite;
     private final int idx;
-    private final int width;
+    private int width; /* not final because we need to cut it sometimes */
     private final int height;
 
     public Block(Texture tex, final int idx) {
@@ -21,6 +19,12 @@ public class Block extends Actor {
         height = tex.getHeight();
         spritePos(sprite.getX(), sprite.getY());
     }
+
+    public void trim(int width) {
+        this.sprite.setSize((int) width, height);
+        // TODO tez trzeba 'width' zmienic, pytanie czy w ogole to jest potrzebne
+    }
+
 
     public void spritePos(float x, float y) {
         sprite.setPosition(x, y);
@@ -39,5 +43,7 @@ public class Block extends Actor {
         sprite.draw(batch);
     }
 
-
+    public int getIdx() {
+        return idx;
+    }
 }

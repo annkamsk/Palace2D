@@ -18,7 +18,7 @@ public class MainMenuScreen implements Screen {
     final Palace2D game;
     private Stage stage;
 
-    public MainMenuScreen(Palace2D game) {
+    public MainMenuScreen(final Palace2D game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
 
@@ -35,15 +35,16 @@ public class MainMenuScreen implements Screen {
                 ("skins/glassy/skin/glassy-ui.json")));
         playButton.setWidth(Gdx.graphics.getWidth() / 2);
         playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton
-                .getWidth() / 2,Gdx.graphics.getHeight() / 2 - playButton
+                .getWidth() / 2, Gdx.graphics.getHeight() / 2 - playButton
                 .getHeight() / 2);
-        playButton.addListener(new InputListener(){
+        playButton.addListener(new InputListener() {
             @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new GameScreen(game));
             }
+
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
         });

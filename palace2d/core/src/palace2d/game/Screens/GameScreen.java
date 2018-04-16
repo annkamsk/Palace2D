@@ -13,23 +13,80 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import palace2d.game.Block;
 import palace2d.game.Palace2D;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 
+/**
+ * TODO TODO TODO
+ * poniewaz bylo duzo problemow zeby zgrać akcje spadania klocków
+ * zrobilem to tak, ze na poczatku gry generuje MAX_BLOCKS klockow,
+ * są ukryte i potem upadający uwidacznia kolejnego.
+ * TODO TODO TODO
+ */
+
+
 public class GameScreen implements Screen {
+    private static final int MAX_BLOCKS = 5;
+    private static final int INIT_BLOCK_WIDTH = 578; // px
+    private static final int BLOCK_HEIGHT = 60; // px
+    private static final int DROP_HEIGHT = 20; // px
+
+    private static int actualBlockNumber = 0;
+    private static int actualStackLeftEdge; // px
+    private static int actualStackRightEdge; // px
+
     private Stage stage;
     private Palace2D game;
-
     private Viewport viewport;
     private ArrayList<Texture> blockTextures;
     private ArrayList<Block> blocks;
+
+    // TODO 800 x 600 tez zrobic jako zmienna globalna
+
 
     public GameScreen(Palace2D game) {
         this.game = game;
         viewport = new FitViewport(800, 600);
         stage = new Stage(new ScreenViewport());
         createGameObjects();
+    }
+
+
+    private void SetStackEdges(Texture background) {
+        int width = background.getWidth();
+        actualStackLeftEdge = width / 2 - INIT_BLOCK_WIDTH / 2;
+        actualStackRightEdge = actualStackLeftEdge + INIT_BLOCK_WIDTH;
+    }
+
+    private int blockWidth() {
+        return actualStackRightEdge - actualStackLeftEdge;
+    }
+
+    private boolean gameLost() {
+        return blockWidth() <= 0;
+    }
+
+    private boolean gameWon() {
+        return actualBlockNumber == MAX_BLOCKS;
+    }
+
+    private boolean gameContinues() {
+        return !gameLost() && !gameWon();
+    }
+
+
+    private void stageKeyboardPrepare() {
+        /* make stage process keyboard events */
+        Gdx.input.setInputProcessor(stage);
+
+        /* make stage catch keyboard events and pass it to block */
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                Gdx.app.log("Image ClickListener", "keyDown. keycode=" + keycode);
+                return true;
+            }
+        });
     }
 
     private void createGameObjects() {
@@ -39,16 +96,28 @@ public class GameScreen implements Screen {
         stage.addActor(getActorFromTexture(backgroundTexture, 0, 0, Gdx
                 .graphics.getWidth(), Gdx.graphics.getHeight()));
 
+        stageKeyboardPrepare();
+
+        SetStackEdges(backgroundTexture);
 
         /* creating block textures */
-        blockTextures = new ArrayList<>();
+        // TODO bedziemy z tego korzystac?
+        blockTextures = new ArrayList<Texture>();
         blockTextures.add(new Texture(Gdx.files.internal("block0.png")));
         blockTextures.add(new Texture(Gdx.files.internal("block1.png")));
 
         /* creating blocks */
-        blocks = new ArrayList<>();
-        createBlock(0,111, 10, 578, 60);
-        createBlock(1,111, 100, 578, 60);
+        blocks = new ArrayList<Block>();
+        Block first = createBlock(0, 111, 10, 578, 60);
+
+        for (int i = 1; i <= MAX_BLOCKS; i++) {
+            createBlock(i, actualStackLeftEdge, 100, blockWidth(), BLOCK_HEIGHT);
+        }
+
+        first.setVisible(true); /* first block is already set */
+
+        /* Assign first block ready, after dropping it will cascade */
+        makeBlockReady(blocks.get(1));
     }
 
 
@@ -58,31 +127,99 @@ public class GameScreen implements Screen {
         return new Image(texRegion);
     }
 
-    private void createBlock(int idx, int x, int y, int w, int h) {
-        Texture blockTexture = new Texture(Gdx.files.internal("block" + idx  +
-                ".png"));
-        blockTextures.add(blockTexture);
+    /**
+     * Creates invisible block with no actions.
+     * Adds it to 'blocks' list, focuses stage on it and assign as an actor.
+     *
+     * @return Created block
+     */
+    private Block createBlock(int idx, int x, int y, int w, int h) {
+//        Texture blockTexture = new Texture(Gdx.files.internal("block" + idx +
+//                ".png"));
+        // TODO to trzeba bedzie potem zmienic
+        Texture blockTexture = new Texture(Gdx.files.internal("block0.png"));
+
+        // TODO bedziemy z tego korzystac?
+        // blockTextures.add(blockTexture);
+
         Block block = new Block(blockTexture, idx);
         blocks.add(block);
         block.spritePos(x, y);
-
-        if (idx != 0) {
-            createBlockActions(block);
-        }
-
+        block.setVisible(false);
         stage.addActor(block);
+        return block;
     }
 
-    private void createBlockActions(Block block) {
+
+    private Action SideToSideAction(Block block) {
         SequenceAction overallSequence = new SequenceAction();
-        overallSequence.addAction(Actions.moveTo(0, block.getY(), 2f));
+        overallSequence.addAction(Actions.moveTo(0, block.getY(), 1f));
         overallSequence.addAction(Actions.moveTo(800 - block.getWidth(),
-                block.getY(),2f));
+                block.getY(), 1f));
         RepeatAction infiniteLoop = new RepeatAction();
         infiniteLoop.setCount(RepeatAction.FOREVER);
         infiniteLoop.setAction(overallSequence);
-        block.addAction(infiniteLoop);
+        return infiniteLoop;
     }
+
+
+    /**
+     * Makes existing but hidden block ready to be shown.
+     */
+    private void makeBlockReady(Block b) {
+        Block previous = blocks.get(b.getIdx() - 1);
+        b.trim(blockWidth());
+        b.spritePos(actualStackLeftEdge, previous.getTop() + DROP_HEIGHT);
+        b.addAction(SideToSideAction(b));
+        stage.setKeyboardFocus(b);
+        b.setVisible(true);
+        b.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.SPACE) {
+                    Actor myBlock = event.getTarget();
+                    myBlock.clear();
+                    stage.unfocus(myBlock);
+                    myBlock.addAction(
+                            Actions.sequence(
+                                    Actions.moveTo(myBlock.getX(),
+                                            myBlock.getY() - DROP_HEIGHT, 0.5f)
+                                    , new Action() {
+                                        @Override
+                                        public boolean act(float delta) {
+                                            Block me = (Block) this.getTarget();
+                                            dropAction(me);
+                                            return true;
+                                        }
+                                    }
+                            ));
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void dropAction(Block me) {
+        ++actualBlockNumber;
+        actualStackLeftEdge = Math.max(actualStackLeftEdge, (int) me.getX());
+        actualStackRightEdge = Math.min(actualStackRightEdge, (int) me.getX() + (int) me.getWidth());
+        me.trim(blockWidth());
+        me.spritePos(actualStackLeftEdge, me.getY());
+        if (gameContinues()) {
+            Gdx.app.log("info",
+                    "I DROPPED BLOCK NR " + actualBlockNumber);
+            Block next = blocks.get(me.getIdx() + 1);
+            makeBlockReady(next);
+        } else {
+            /* KONIEC GRY */
+            if (gameWon())
+                Gdx.app.log("info", "YOU WIN");
+            else
+                Gdx.app.log("info", "YOU LOSE");
+        }
+    }
+
 
     @Override
     public void render(float delta) {
@@ -119,5 +256,4 @@ public class GameScreen implements Screen {
     public void dispose() {
         stage.dispose();
     }
-
 }
