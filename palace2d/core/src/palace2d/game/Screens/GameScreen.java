@@ -42,8 +42,6 @@ public class GameScreen implements Screen {
     private ArrayList<Texture> blockTextures;
     private ArrayList<Block> blocks;
 
-    // TODO 800 x 600 tez zrobic jako zmienna globalna
-
 
     public GameScreen(Palace2D game) {
         this.game = game;
@@ -154,7 +152,7 @@ public class GameScreen implements Screen {
     private Action SideToSideAction(Block block) {
         SequenceAction overallSequence = new SequenceAction();
         overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
-        overallSequence.addAction(Actions.moveTo(800 - block.getWidth(),
+        overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
                 block.getY(), BLOCK_MOVE_DURATION));
         RepeatAction infiniteLoop = new RepeatAction();
         infiniteLoop.setCount(RepeatAction.FOREVER);
