@@ -26,10 +26,12 @@ import java.util.ArrayList;
 
 
 public class GameScreen implements Screen {
-    private static final int MAX_BLOCKS = 5;
+    private static final int MAX_BLOCKS = 20;
     private static final int INIT_BLOCK_WIDTH = 578; // px
     private static final int BLOCK_HEIGHT = 60; // px
     private static final int DROP_HEIGHT = 20; // px
+    private static final float BLOCK_DROP_DURATION = 0.25f;
+    private static final float BLOCK_MOVE_DURATION = 1f;
 
     private static int actualBlockNumber = 0;
     private static int actualStackLeftEdge; // px
@@ -37,7 +39,6 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     private Palace2D game;
-    private Viewport viewport;
     private ArrayList<Texture> blockTextures;
     private ArrayList<Block> blocks;
 
@@ -46,8 +47,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(Palace2D game) {
         this.game = game;
-        viewport = new FitViewport(800, 600);
-        stage = new Stage(new ScreenViewport());
+        this.stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT, this.game.camera));
         createGameObjects();
     }
 
@@ -153,9 +153,9 @@ public class GameScreen implements Screen {
 
     private Action SideToSideAction(Block block) {
         SequenceAction overallSequence = new SequenceAction();
-        overallSequence.addAction(Actions.moveTo(0, block.getY(), 1f));
+        overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
         overallSequence.addAction(Actions.moveTo(800 - block.getWidth(),
-                block.getY(), 1f));
+                block.getY(), BLOCK_MOVE_DURATION));
         RepeatAction infiniteLoop = new RepeatAction();
         infiniteLoop.setCount(RepeatAction.FOREVER);
         infiniteLoop.setAction(overallSequence);
@@ -183,7 +183,7 @@ public class GameScreen implements Screen {
                     myBlock.addAction(
                             Actions.sequence(
                                     Actions.moveTo(myBlock.getX(),
-                                            myBlock.getY() - DROP_HEIGHT, 0.5f)
+                                            myBlock.getY() - DROP_HEIGHT, BLOCK_DROP_DURATION)
                                     , new Action() {
                                         @Override
                                         public boolean act(float delta) {
@@ -193,11 +193,21 @@ public class GameScreen implements Screen {
                                         }
                                     }
                             ));
+
+                    if (myBlock.getY() > 4 * BLOCK_HEIGHT) {
+                        moveCamera(0f, BLOCK_HEIGHT);
+                    }
+
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    private void moveCamera(float x, float y) {
+        stage.getViewport().getCamera().translate(x, y, 0f);
+        stage.getViewport().getCamera().update();
     }
 
     private void dropAction(Block me) {
@@ -232,7 +242,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, false);
     }
 
     @Override

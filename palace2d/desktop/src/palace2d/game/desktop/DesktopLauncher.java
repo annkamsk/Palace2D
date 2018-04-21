@@ -7,9 +7,9 @@ import palace2d.game.Palace2D;
 public class DesktopLauncher {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Palace2D";
-        config.width = 800;
-        config.height = 600;
+        config.title = Palace2D.TITLE;
+        config.width = Palace2D.V_WIDTH;
+        config.height = Palace2D.V_HEIGHT;
         new LwjglApplication(new Palace2D(), config);
     }
 }
