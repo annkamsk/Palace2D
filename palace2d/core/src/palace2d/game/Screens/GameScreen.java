@@ -4,8 +4,6 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -28,13 +26,12 @@ import java.util.ArrayList;
 
 
 public class GameScreen implements Screen {
-    private static final int MAX_BLOCKS = 50;
+    private static final int MAX_BLOCKS = 5;
     private static final int INIT_BLOCK_WIDTH = 578; // px
     private static final int BLOCK_HEIGHT = 60; // px
     private static final int DROP_HEIGHT = 20; // px
     private static final float BLOCK_DROP_DURATION = 0.25f;
     private static final float BLOCK_MOVE_DURATION = 1f;
-    private static final float CAMERA_SMOOTH = 1f; // lower the smoother
 
     private static int actualBlockNumber = 0;
     private static int actualStackLeftEdge; // px
@@ -42,14 +39,12 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     private Palace2D game;
-    private Image backgroundImg;
     private ArrayList<Texture> blockTextures;
     private ArrayList<Block> blocks;
 
-
     public GameScreen(Palace2D game) {
         this.game = game;
-        this.stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT, this.game.camera));
+        stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT));
         createGameObjects();
     }
 
@@ -95,11 +90,8 @@ public class GameScreen implements Screen {
         /* creating background */
         Texture backgroundTexture = new Texture(Gdx.files.internal
                 ("background.png"));
-
-        backgroundImg = getActorFromTexture(backgroundTexture, 0, 0, Gdx
-                .graphics.getWidth(), Gdx.graphics.getHeight());
-
-        stage.addActor(backgroundImg);
+        stage.addActor(getActorFromTexture(backgroundTexture, 0, 0, Gdx
+                .graphics.getWidth(), Gdx.graphics.getHeight()));
 
         stageKeyboardPrepare();
 
@@ -126,7 +118,7 @@ public class GameScreen implements Screen {
     }
 
 
-    private Image getActorFromTexture(Texture tex, int x, int y, int w, int h) {
+    private Actor getActorFromTexture(Texture tex, int x, int y, int w, int h) {
         TextureRegion texRegion = new TextureRegion(tex,
                 x, y, w, h);
         return new Image(texRegion);
@@ -198,30 +190,11 @@ public class GameScreen implements Screen {
                                         }
                                     }
                             ));
-
-                    if (myBlock.getY() > 4 * BLOCK_HEIGHT) {
-                        moveCamera(0f, BLOCK_HEIGHT);
-                    }
-
                     return true;
                 }
                 return false;
             }
         });
-    }
-
-    private void increaseScore() {
-        game.score++;
-        game.scoreName = "score: " + game.score;
-    }
-
-    private void moveCamera(float x, float y) {
-        Vector3 cameraPosition = stage.getViewport().getCamera().position;
-        Vector3 target = new Vector3(x, y, 0.f);
-        target.add(cameraPosition);
-
-        cameraPosition.lerp(target, CAMERA_SMOOTH);
-        backgroundImg.addAction(Actions.moveBy(x, y));
     }
 
     private void dropAction(Block me) {
@@ -235,7 +208,6 @@ public class GameScreen implements Screen {
                     "I DROPPED BLOCK NR " + actualBlockNumber);
             Block next = blocks.get(me.getIdx() + 1);
             makeBlockReady(next);
-            increaseScore();
         } else {
             /* KONIEC GRY */
             if (gameWon())
@@ -253,11 +225,6 @@ public class GameScreen implements Screen {
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
-        game.batch.begin();
-        game.font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        game.font.draw(game.batch, game.scoreName, 25, 100);
-        game.batch.end();
     }
 
     @Override

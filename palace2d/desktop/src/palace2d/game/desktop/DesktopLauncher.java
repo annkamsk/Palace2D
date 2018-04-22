@@ -10,6 +10,7 @@ public class DesktopLauncher {
         config.title = Palace2D.TITLE;
         config.width = Palace2D.V_WIDTH;
         config.height = Palace2D.V_HEIGHT;
+
         new LwjglApplication(new Palace2D(), config);
     }
 }
