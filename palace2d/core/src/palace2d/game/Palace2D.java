@@ -38,13 +38,11 @@ public class Palace2D extends Game {
         scoreName = "score: 0";
 	}
 
-	public void resize(int width, int height) {
-	}
-
+	public void resize(int width, int height) {}
 
 	@Override
 	public void render () {
-	    super.render();
+		super.render();
 	}
 
 	@Override
