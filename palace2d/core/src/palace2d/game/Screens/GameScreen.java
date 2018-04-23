@@ -8,8 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import palace2d.game.Block;
 import palace2d.game.Palace2D;
 
@@ -49,7 +47,7 @@ public class GameScreen implements Screen {
     }
 
 
-    private void SetStackEdges(Texture background) {
+    private void setStackEdges(Texture background) {
         int width = background.getWidth();
         actualStackLeftEdge = width / 2 - INIT_BLOCK_WIDTH / 2;
         actualStackRightEdge = actualStackLeftEdge + INIT_BLOCK_WIDTH;
@@ -86,17 +84,22 @@ public class GameScreen implements Screen {
         });
     }
 
-    private void createGameObjects() {
-        /* creating background */
+    private void setBackgroundTexture() {
         Texture backgroundTexture = new Texture(Gdx.files.internal
                 ("background.png"));
+
         stage.addActor(getActorFromTexture(backgroundTexture, 0, 0, Gdx
                 .graphics.getWidth(), Gdx.graphics.getHeight()));
-
         stageKeyboardPrepare();
+        setStackEdges(backgroundTexture);
+    }
 
-        SetStackEdges(backgroundTexture);
+    private void createGameObjects() {
+        setBackgroundTexture();
+        initGameBlocks();
+    }
 
+    private void initGameBlocks() {
         /* creating block textures */
         // TODO bedziemy z tego korzystac?
         blockTextures = new ArrayList<Texture>();
@@ -112,15 +115,13 @@ public class GameScreen implements Screen {
         }
 
         first.setVisible(true); /* first block is already set */
-
-        /* Assign first block ready, after dropping it will cascade */
-        makeBlockReady(blocks.get(1));
     }
 
 
     private Actor getActorFromTexture(Texture tex, int x, int y, int w, int h) {
         TextureRegion texRegion = new TextureRegion(tex,
                 x, y, w, h);
+
         return new Image(texRegion);
     }
 
@@ -141,21 +142,27 @@ public class GameScreen implements Screen {
 
         Block block = new Block(blockTexture, idx);
         blocks.add(block);
+
         block.spritePos(x, y);
         block.setVisible(false);
+
         stage.addActor(block);
+
         return block;
     }
 
 
-    private Action SideToSideAction(Block block) {
+    private Action sideToSideAction(Block block) {
         SequenceAction overallSequence = new SequenceAction();
+
         overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
         overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
                 block.getY(), BLOCK_MOVE_DURATION));
+
         RepeatAction infiniteLoop = new RepeatAction();
         infiniteLoop.setCount(RepeatAction.FOREVER);
         infiniteLoop.setAction(overallSequence);
+
         return infiniteLoop;
     }
 
@@ -165,10 +172,13 @@ public class GameScreen implements Screen {
      */
     private void makeBlockReady(Block b) {
         Block previous = blocks.get(b.getIdx() - 1);
+
         b.trim(blockWidth());
         b.spritePos(actualStackLeftEdge, previous.getTop() + DROP_HEIGHT);
-        b.addAction(SideToSideAction(b));
+        b.addAction(sideToSideAction(b));
+
         stage.setKeyboardFocus(b);
+
         b.setVisible(true);
         b.addListener(new InputListener() {
             @Override
@@ -201,11 +211,14 @@ public class GameScreen implements Screen {
         ++actualBlockNumber;
         actualStackLeftEdge = Math.max(actualStackLeftEdge, (int) me.getX());
         actualStackRightEdge = Math.min(actualStackRightEdge, (int) me.getX() + (int) me.getWidth());
+
         me.trim(blockWidth());
         me.spritePos(actualStackLeftEdge, me.getY());
+
         if (gameContinues()) {
             Gdx.app.log("info",
                     "I DROPPED BLOCK NR " + actualBlockNumber);
+
             Block next = blocks.get(me.getIdx() + 1);
             makeBlockReady(next);
         } else {
@@ -234,6 +247,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        /* Assign first block ready, after dropping it will cascade */
+        makeBlockReady(blocks.get(1));
     }
 
     @Override

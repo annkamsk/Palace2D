@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import palace2d.game.Palace2D;
 
 public class MainMenuScreen implements Screen {
@@ -22,34 +21,8 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final Palace2D game) {
         this.game = game;
         stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT));
-
-        /* creating menu background */
-        Texture backgroundTexture = new Texture(Gdx.files.internal
-                ("background.png"));
-        TextureRegion backgroundRegion = new TextureRegion(backgroundTexture,
-                0, 0, 800, 600);
-        Image backgroundActor = new Image(backgroundRegion);
-        stage.addActor(backgroundActor);
-
-        /* creating new game button */
-        TextButton playButton = new TextButton("NEW GAME", new Skin(Gdx.files.internal
-                ("skins/glassy/skin/glassy-ui.json")));
-        playButton.setWidth(Gdx.graphics.getWidth() / 2);
-        playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton
-                .getWidth() / 2, Gdx.graphics.getHeight() / 2 - playButton
-                .getHeight() / 2);
-        playButton.addListener(new InputListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game));
-            }
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-        stage.addActor(playButton);
+        setBackgroundTexture();
+        createNewGameButton();
     }
 
     @Override
@@ -73,6 +46,40 @@ public class MainMenuScreen implements Screen {
     }
 
     public void hide() {
+    }
+
+    private void setBackgroundTexture() {
+        Texture backgroundTexture = new Texture(Gdx.files.internal
+                ("background.png"));
+        TextureRegion backgroundRegion = new TextureRegion(backgroundTexture,
+                0, 0, 800, 600);
+
+        Image backgroundActor = new Image(backgroundRegion);
+
+        stage.addActor(backgroundActor);
+    }
+
+    private void createNewGameButton() {
+        TextButton playButton = new TextButton("NEW GAME", new Skin(Gdx.files.internal
+                ("skins/glassy/skin/glassy-ui.json")));
+
+        playButton.setWidth(Gdx.graphics.getWidth() / 2);
+        playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton
+                .getWidth() / 2, Gdx.graphics.getHeight() / 2 - playButton
+                .getHeight() / 2);
+        playButton.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new GameScreen(game));
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        stage.addActor(playButton);
     }
 
     public void show() {
