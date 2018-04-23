@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import palace2d.game.Palace2D;
 
@@ -20,7 +21,7 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(final Palace2D game) {
         this.game = game;
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT));
 
         /* creating menu background */
         Texture backgroundTexture = new Texture(Gdx.files.internal

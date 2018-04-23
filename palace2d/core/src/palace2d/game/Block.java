@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 
 public class Block extends Actor {
     private Sprite sprite;
+
     private final int idx;
     private int width; /* not final because we need to cut it sometimes */
     private final int height;
@@ -21,14 +22,17 @@ public class Block extends Actor {
     }
 
     public void trim(int width) {
-        this.sprite.setSize((int) width, height);
+        this.sprite.setSize(width, height);
         // TODO tez trzeba 'width' zmienic, pytanie czy w ogole to jest potrzebne
     }
 
+    public Sprite getSprite() {
+        return sprite;
+    }
 
     public void spritePos(float x, float y) {
         sprite.setPosition(x, y);
-        setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        setBounds(x, y, sprite.getWidth(), sprite.getHeight());
     }
 
     @Override
