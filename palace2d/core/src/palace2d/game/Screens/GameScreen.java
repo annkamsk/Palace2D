@@ -16,15 +16,6 @@ import palace2d.game.Palace2D;
 import java.util.ArrayList;
 
 
-/**
- * TODO TODO TODO
- * poniewaz bylo duzo problemow zeby zgrać akcje spadania klocków
- * zrobilem to tak, ze na poczatku gry generuje MAX_BLOCKS klockow,
- * są ukryte i potem upadający uwidacznia kolejnego.
- * TODO TODO TODO
- */
-
-
 public class GameScreen implements Screen {
     private static final int MAX_BLOCKS = 5;
     private static final int INIT_BLOCK_WIDTH = 578; // px
@@ -201,7 +192,8 @@ public class GameScreen implements Screen {
         ++actualBlockNumber;
         actualStackLeftEdge = Math.max(actualStackLeftEdge, (int) me.getX());
         actualStackRightEdge = Math.min(actualStackRightEdge, (int) me.getX() + (int) me.getWidth());
-        me.trim(blockWidth());
+        if (actualStackLeftEdge < actualStackRightEdge)
+            me.trim(blockWidth());
         me.spritePos(actualStackLeftEdge, me.getY());
         if (gameContinues()) {
             Gdx.app.log("info",
