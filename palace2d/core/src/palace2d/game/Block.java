@@ -9,13 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.*;
 public class Block extends Actor {
     private Sprite sprite;
 
-    private final int idx;
     private int width; /* not final because we need to cut it sometimes */
     private final int height;
 
-    public Block(Texture tex, final int idx) {
+    public Block(Texture tex) {
         sprite = new Sprite(tex);
-        this.idx = idx;
         width = tex.getWidth();
         height = tex.getHeight();
         spritePos(sprite.getX(), sprite.getY());
@@ -45,9 +43,5 @@ public class Block extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         sprite.setPosition(getX(), getY());
         sprite.draw(batch);
-    }
-
-    public int getIdx() {
-        return idx;
     }
 }

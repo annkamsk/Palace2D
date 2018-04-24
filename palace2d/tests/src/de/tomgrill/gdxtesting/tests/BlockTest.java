@@ -22,7 +22,7 @@ public class BlockTest {
     @Before
     public void setUp() {
         blockTexture = new Texture(Gdx.files.internal("../core/assets/block0.png"));
-        block = new Block(blockTexture, 0);
+        block = new Block(blockTexture);
     }
 
     @Test
