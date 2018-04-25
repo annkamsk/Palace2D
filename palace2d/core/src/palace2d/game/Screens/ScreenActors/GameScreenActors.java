@@ -1,4 +1,4 @@
-package palace2d.game.Screens;
+package palace2d.game.Screens.ScreenActors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +11,7 @@ import java.util.List;
 public class GameScreenActors {
     private static final int MAX_BLOCKS = 5;
     private static final int INIT_BLOCK_WIDTH = 578; // px
+    private static final int FIRST_MOVING_BLOCK_Y = 100;
 
     private int actualBlockNumber = 0;
 
@@ -42,7 +43,7 @@ public class GameScreenActors {
 
     public void initGameBlocks(Texture blockTexture) {
         for (int i = 0; i < MAX_BLOCKS; i++) {
-            addInvisibleBlock(blockTexture, actualStackLeftEdge, 100);
+            addInvisibleBlock(blockTexture, actualStackLeftEdge, FIRST_MOVING_BLOCK_Y);
         }
     }
 
@@ -73,7 +74,7 @@ public class GameScreenActors {
         getActualBlock().spritePos(x, y);
     }
 
-    public void trimActualBlock() {
+    private void trimActualBlock() {
         if (actualStackLeftEdge < actualStackRightEdge)
             getActualBlock().trim(getBlockWidth());
     }
@@ -99,6 +100,6 @@ public class GameScreenActors {
     }
 
     public boolean hasNextBlock() {
-        return actualBlockNumber == MAX_BLOCKS;
+        return !(actualBlockNumber == MAX_BLOCKS);
     }
 }

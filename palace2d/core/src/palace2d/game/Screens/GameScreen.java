@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import palace2d.game.Block;
 import palace2d.game.Palace2D;
+import palace2d.game.Screens.ScreenActors.GameScreenActors;
 
 import java.util.Iterator;
 
@@ -37,7 +38,7 @@ public class GameScreen implements Screen {
     }
 
     private boolean gameWon() {
-        return actors.hasNextBlock();
+        return !actors.hasNextBlock();
     }
 
     private boolean gameContinues() {

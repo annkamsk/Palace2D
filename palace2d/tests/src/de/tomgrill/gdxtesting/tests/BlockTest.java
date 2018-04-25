@@ -35,24 +35,29 @@ public class BlockTest {
         assertEquals(block.getSprite().getTexture(), blockTexture);
     }
 
+    private void posTest(float x, float y) {
+        block.spritePos(x, y);
+        assertEquals(x, block.getSprite().getX(), 0f);
+        assertEquals(y, block.getSprite().getY(), 0f);
+    }
+
     @Test
     public void spritePosTest() {
-        block.spritePos(10f, 10f);
-        assertEquals(10f, block.getSprite().getX(), 0f);
-        assertEquals(10f, block.getSprite().getY(), 0f);
+        posTest(20, 20);
+        posTest(0, 0);
+        posTest(-20, -20);
+    }
 
-        block.spritePos(0f, 0f);
-        assertEquals(0f, block.getSprite().getY(), 0f);
-        assertEquals(0f, block.getSprite().getY(), 0f);
+    private void trimTest(int width) {
+        block.trim(width);
+        assertEquals(width, block.getSprite().getWidth(), 0f);
     }
 
     @Test
     public void spriteTrimTest() {
-        block.trim(10);
-        assertEquals(10f, block.getSprite().getWidth(), 0f);
-
-        block.trim(100);
-        assertEquals(100f, block.getSprite().getWidth(), 0f);
+        trimTest(10);
+        trimTest(100);
+        trimTest(0);
     }
 }
 
