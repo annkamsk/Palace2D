@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import palace2d.game.Block;
 import palace2d.game.Palace2D;
@@ -62,6 +64,28 @@ public class GameScreen implements Screen {
 
         stage.addActor(getActorFromTexture(backgroundTexture, 0, 0, Gdx
                 .graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        /* creating end game button */
+        TextButton endButton = new TextButton("END GAME", new Skin(Gdx.files
+                .internal
+                        ("skins/glassy/skin/glassy-ui.json")), "small");
+        endButton.setBounds(endButton.getWidth() / 10, Gdx.graphics.getHeight
+                        () - endButton.getHeight(),
+                100,
+                50);
+        endButton.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new EndGameScreen(game));
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        stage.addActor(endButton);
+
         stageKeyboardPrepare();
         actors.setStackEdges(backgroundTexture.getWidth());
     }
