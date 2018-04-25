@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.runner.RunWith;
 import palace2d.game.Block;
-import palace2d.game.Screens.ScreenActors.GameScreenActors;
+import palace2d.game.ScreenActors.GameScreenActors;
 
 import java.util.Iterator;
 

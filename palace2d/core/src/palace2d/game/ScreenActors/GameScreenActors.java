@@ -1,4 +1,4 @@
-package palace2d.game.Screens.ScreenActors;
+package palace2d.game.ScreenActors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

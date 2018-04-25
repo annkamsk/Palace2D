@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import palace2d.game.Block;
 import palace2d.game.Palace2D;
-import palace2d.game.Screens.ScreenActors.GameScreenActors;
+import palace2d.game.ScreenActors.GameScreenActors;
 
 import java.util.Iterator;
 
@@ -59,13 +59,7 @@ public class GameScreen implements Screen {
         });
     }
 
-    private void setBackgroundTexture() {
-        Texture backgroundTexture = actors.createTexture(backgroundTextureFile);
-
-        stage.addActor(getActorFromTexture(backgroundTexture, 0, 0, Gdx
-                .graphics.getWidth(), Gdx.graphics.getHeight()));
-
-        /* creating end game button */
+    private void createEndGameButton() {
         TextButton endButton = new TextButton("END GAME", new Skin(Gdx.files
                 .internal
                         ("skins/glassy/skin/glassy-ui.json")), "small");
@@ -85,7 +79,15 @@ public class GameScreen implements Screen {
             }
         });
         stage.addActor(endButton);
+    }
 
+    private void setBackgroundTexture() {
+        Texture backgroundTexture = actors.createTexture(backgroundTextureFile);
+
+        stage.addActor(getActorFromTexture(backgroundTexture, 0, 0, Gdx
+                .graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        createEndGameButton();
         stageKeyboardPrepare();
         actors.setStackEdges(backgroundTexture.getWidth());
     }
@@ -180,7 +182,6 @@ public class GameScreen implements Screen {
 
             makeBlockReady(actors.getActualBlock());
         } else {
-            /* KONIEC GRY */
             if (gameWon())
                 Gdx.app.log("info", "YOU WIN");
             else
