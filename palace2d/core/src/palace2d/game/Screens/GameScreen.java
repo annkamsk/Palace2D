@@ -15,6 +15,8 @@ import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.GameScreenActors;
 
 import java.util.Iterator;
+import java.util.ArrayList;
+
 
 public class GameScreen implements Screen {
     private static final int DROP_HEIGHT = 20; // px
@@ -175,7 +177,6 @@ public class GameScreen implements Screen {
     private void dropAction() {
         actors.setDroppedBlockSizeAndPosition();
         actors.prepareNewBlock();
-
         if (gameContinues()) {
             Gdx.app.log("info",
                     "I DROPPED BLOCK NR " + (actors.getActualBlockNumber() - 1));
