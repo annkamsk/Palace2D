@@ -18,14 +18,14 @@ public class Palace2D extends Game {
 
 	@Override
 	public void create () {
-        this.setScreen(new MainMenuScreen(this));
+	    this.setScreen(new MainMenuScreen(this));
 	}
 
 	public void resize(int width, int height) {}
 
 	@Override
 	public void render () {
-		super.render();
+        super.render();
 	}
 
 	@Override
