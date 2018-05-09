@@ -25,7 +25,7 @@ public class Palace2D extends Game {
 
 	@Override
 	public void render () {
-        super.render();
+	    super.render();
 	}
 
 	@Override
