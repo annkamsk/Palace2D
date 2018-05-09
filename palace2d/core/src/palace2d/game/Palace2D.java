@@ -18,8 +18,6 @@ public class Palace2D extends Game {
 
 	@Override
 	public void create () {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, V_WIDTH, V_HEIGHT);
         this.setScreen(new MainMenuScreen(this));
 	}
 
