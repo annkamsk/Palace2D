@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import palace2d.game.Block;
+import palace2d.game.GameCamera;
 import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.GameScreenActors;
 
@@ -32,11 +33,14 @@ public class GameScreen implements Screen {
     private Image backgroundImg;
     private TextButton endButton;
     private GameScreenActors actors;
+    private GameCamera camera;
 
     public GameScreen(Palace2D game) {
         this.game = game;
-        stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT));
-        actors = new GameScreenActors();
+        this.camera = new GameCamera();
+        this.camera.setOrtho(Palace2D.V_WIDTH, Palace2D.V_HEIGHT);
+        this.stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT, this.camera.getCamera()));
+        this.actors = new GameScreenActors();
         createGameObjects();
     }
 
@@ -98,12 +102,8 @@ public class GameScreen implements Screen {
         actors.setStackEdges(backgroundTexture.getWidth());
     }
 
-    private void moveCamera(float x, float y) {
-        Vector3 cameraPosition = stage.getViewport().getCamera().position;
-        Vector3 target = new Vector3(x, y, 0.f);
-        target.add(cameraPosition);
-
-        cameraPosition.lerp(target, CAMERA_SMOOTH);
+    private void moveView(float x, float y) {
+        camera.moveBy(x, y);
         backgroundImg.addAction(Actions.moveBy(x, y));
         endButton.addAction(Actions.moveBy(x, y));
     }
@@ -183,7 +183,7 @@ public class GameScreen implements Screen {
                             ));
 
                     if (myBlock.getY() > 4 * actors.BLOCK_HEIGHT) {
-                        moveCamera(0f, actors.BLOCK_HEIGHT);
+                        moveView(0f, actors.BLOCK_HEIGHT);
                     }
 
                     return true;

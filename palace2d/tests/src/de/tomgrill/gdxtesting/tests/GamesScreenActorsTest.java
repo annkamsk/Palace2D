@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import de.tomgrill.gdxtesting.GdxTestRunner;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -34,8 +35,8 @@ public class GamesScreenActorsTest {
     @Test
     public void createTextureTest() {
         String path = "../core/assets/block1.png";
-        assertTrue("No such a file or directory", Gdx.files
-                .internal(path).exists());
+        assertTrue("No such a file or directory",
+                Gdx.files.internal(path).exists());
 
         Texture testTexture = actors.createTexture(path);
         Pixmap result = new Pixmap(new FileHandle(path));
