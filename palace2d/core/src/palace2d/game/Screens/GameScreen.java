@@ -122,7 +122,7 @@ public class GameScreen implements Screen {
     }
 
     private void initGameBlocks() {
-        actors.initGameBlocks(actors.createTexture(blockTextureFile));
+        actors.initGameBlocks();
         actors.setActualBlockPosition(111, 10);
         actors.setActualBlockVisible();
         actors.prepareNewBlock();

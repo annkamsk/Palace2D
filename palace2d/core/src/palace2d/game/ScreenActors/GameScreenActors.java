@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameScreenActors {
-    private static final int MAX_BLOCKS = 100;
+    private static final int MAX_BLOCKS = 20;
     private static final int INIT_BLOCK_WIDTH = 578; // px
     private static final int FIRST_MOVING_BLOCK_Y = 100;
 
@@ -43,9 +43,11 @@ public class GameScreenActors {
         block.setVisible(false);
     }
 
-    public void initGameBlocks(Texture blockTexture) {
+    public void initGameBlocks() {
         for (int i = 0; i < MAX_BLOCKS; i++) {
-            addInvisibleBlock(blockTexture, actualStackLeftEdge, FIRST_MOVING_BLOCK_Y);
+            addInvisibleBlock(createTexture("block" + i + ".png"),
+                    actualStackLeftEdge,
+                    FIRST_MOVING_BLOCK_Y);
         }
     }
 
