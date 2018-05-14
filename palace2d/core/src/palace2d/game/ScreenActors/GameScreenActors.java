@@ -9,9 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GameScreenActors {
-    private static final int MAX_BLOCKS = 5;
+    private static final int MAX_BLOCKS = 100;
     private static final int INIT_BLOCK_WIDTH = 578; // px
     private static final int FIRST_MOVING_BLOCK_Y = 100;
+
+    public final int BLOCK_HEIGHT = 60; //px
 
     private int actualBlockNumber = 0;
 

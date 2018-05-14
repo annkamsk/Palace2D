@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import palace2d.game.Block;
+import palace2d.game.GameCamera;
 import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.GameScreenActors;
 
@@ -22,17 +24,23 @@ public class GameScreen implements Screen {
     private static final int DROP_HEIGHT = 20; // px
     private static final float BLOCK_DROP_DURATION = 0.25f;
     private static final float BLOCK_MOVE_DURATION = 1f;
+    private static final float CAMERA_SMOOTH = 1f;
     private static final String backgroundTextureFile = "background.png";
     private static final String blockTextureFile = "block0.png";
 
     private Stage stage;
     private Palace2D game;
+    private Image backgroundImg;
+    private TextButton endButton;
     private GameScreenActors actors;
+    private GameCamera camera;
 
     public GameScreen(Palace2D game) {
         this.game = game;
-        stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT));
-        actors = new GameScreenActors();
+        this.camera = new GameCamera();
+        this.camera.setOrtho(Palace2D.V_WIDTH, Palace2D.V_HEIGHT);
+        this.stage = new Stage(new FitViewport(Palace2D.V_WIDTH, Palace2D.V_HEIGHT, this.camera.getCamera()));
+        this.actors = new GameScreenActors();
         createGameObjects();
     }
 
@@ -62,13 +70,11 @@ public class GameScreen implements Screen {
     }
 
     private void createEndGameButton() {
-        TextButton endButton = new TextButton("END GAME", new Skin(Gdx.files
+        endButton = new TextButton("END GAME", new Skin(Gdx.files
                 .internal
                         ("skins/glassy/skin/glassy-ui.json")), "small");
-        endButton.setBounds(endButton.getWidth() / 10, Gdx.graphics.getHeight
-                        () - endButton.getHeight(),
-                100,
-                50);
+        endButton.setBounds(endButton.getWidth() / 10,
+                Gdx.graphics.getHeight() - endButton.getHeight(), 100, 50);
         endButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -86,12 +92,20 @@ public class GameScreen implements Screen {
     private void setBackgroundTexture() {
         Texture backgroundTexture = actors.createTexture(backgroundTextureFile);
 
-        stage.addActor(getActorFromTexture(backgroundTexture, 0, 0, Gdx
-                .graphics.getWidth(), Gdx.graphics.getHeight()));
+        backgroundImg = getActorFromTexture(backgroundTexture, 0, 0, Gdx
+                .graphics.getWidth(), Gdx.graphics.getHeight());
+
+        stage.addActor(backgroundImg);
 
         createEndGameButton();
         stageKeyboardPrepare();
         actors.setStackEdges(backgroundTexture.getWidth());
+    }
+
+    private void moveView(float x, float y) {
+        camera.moveBy(x, y);
+        backgroundImg.addAction(Actions.moveBy(x, y));
+        endButton.addAction(Actions.moveBy(x, y));
     }
 
     private void setActors() {
@@ -114,7 +128,7 @@ public class GameScreen implements Screen {
         actors.prepareNewBlock();
     }
 
-    private Actor getActorFromTexture(Texture tex, int x, int y, int w, int h) {
+    private Image getActorFromTexture(Texture tex, int x, int y, int w, int h) {
         TextureRegion texRegion = new TextureRegion(tex,
                 x, y, w, h);
 
@@ -167,6 +181,11 @@ public class GameScreen implements Screen {
                                         }
                                     }
                             ));
+
+                    if (myBlock.getY() > 4 * actors.BLOCK_HEIGHT) {
+                        moveView(0f, actors.BLOCK_HEIGHT);
+                    }
+
                     return true;
                 }
                 return false;

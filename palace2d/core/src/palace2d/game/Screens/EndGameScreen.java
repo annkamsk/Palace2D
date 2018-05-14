@@ -33,10 +33,8 @@ public class EndGameScreen implements Screen {
                 .graphics.getWidth(), Gdx.graphics.getHeight()));
         text = new Label("YOU FINISHED YOUR GAME", new Skin(Gdx.files
                 .internal("skins/glassy/skin/glassy-ui.json")));
-        text.setBounds(Gdx.graphics.getWidth() / 2 - text.getWidth() / 2, Gdx
-                .graphics
-                .getHeight()
-                / 2, 200, 40);
+        text.setBounds(Gdx.graphics.getWidth() / 2 - text.getWidth() / 2,
+                Gdx.graphics.getHeight() / 2, 200, 40);
         stage.addActor(text);
     }
 
