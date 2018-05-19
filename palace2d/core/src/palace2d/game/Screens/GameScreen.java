@@ -78,7 +78,7 @@ public class GameScreen implements Screen {
         endButton.addListener(new InputListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new EndGameScreen(game));
+                game.setScreen(new EndGameScreen(game, actors.getActualBlockNumber() - 1));
             }
 
             @Override
@@ -122,7 +122,7 @@ public class GameScreen implements Screen {
     }
 
     private void initGameBlocks() {
-        actors.initGameBlocks(actors.createTexture(blockTextureFile));
+        actors.initGameBlocks();
         actors.setActualBlockPosition(111, 10);
         actors.setActualBlockVisible();
         actors.prepareNewBlock();
