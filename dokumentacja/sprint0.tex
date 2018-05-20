@@ -47,9 +47,33 @@ Planujemy następujący harmonogram:
 \item\textbf{Sprint 0} - 12.03 - Wizja, harmonogram, wybór technologii
 \item\textbf{Sprint I} - 04.04 - Specyfikacja wymagań (wersja pierwsza), kod wykonywalny: rozpoczęcie nowej gry, plansza z jednym klockiem
 \item\textbf{Sprint II} - 25.04 - Specyfikacja wymagań (dopracowanie), architektura systemu (wersja pierwsza), kod wykonywalny: budowanie wieży (lądowanie klocków, odcinanie), kończenie gry
-\item\textbf{Sprint III} - 09.05 - Architektura systemu (dopracowanie), kod wykonywalny: przesuwanie widoku wieży
-\item\textbf{Sprint IV} - 23.05 - Plakat (wersja pierwsza), architektura systemu (dopracowanie), grafika wieży, kod wykonywalny: możliwość budowania wielopoziomowej wieży (tzn. do poziomu określonego jako MAX > 100), grafika dopasowująca się do szerokości klocka, ekran kończący grę, ranking 10 najlepszych wyników, możliwość zapisu wyniku
-\item\textbf{Sprint V} - 30.05 - Plakat (dopracowanie), prezentacja, grafika: dopracowanie wyglądu interfejsu, dodanie nowych skórek (w tym możliwość budowania innej budowli - nie tylko Pałacu), kod wykonywalny:  ekran rozpoczynający grę i poruszanie się między ekranami, możliwość wyboru skórki
+\item\textbf{Sprint IV} - 23.05 - Plakat (wersja pierwsza), architektura systemu (dopracowanie), kod wykonywalny: 
+  \begin{itemize}
+    \item dynamiczne tworzenie klocków,
+  \item możliwość budowania wielopoziomowej wieży (tzn. do poziomu określonego jako MAX),
+  \item zmiana tekstur w zależności od aktualnej szerokości klocka (tzn. zarządzanie teksturami tak, aby ułożona wieża jak najbardziej przypominała Pałac),
+  \item ekran kończący grę,
+  \item wyświetlanie grafiki pełnej ułożonej przez gracza wieży po zakończeniu gry,
+  \item ranking 10 najlepszych wyników,
+  \item możliwość zapisu wyniku
+  \end{itemize}
+  \item\textbf{Sprint V} - 30.05 - Plakat (dopracowanie), grafika:
+    \begin{itemize}
+    \item dopracowanie wyglądu interfejsu (m.in dopracowanie wyglądu Pałacu),
+      \item grafika ekranu rozpoczynającego grę,
+    \item grafika MIM-u,
+    \end{itemize}
+    kod wykonywalny:
+    \begin{itemize}
+    \item ekran rozpoczynający grę,
+    \item poruszanie się między ekranami,
+    \item możliwość wyboru poziomu trudności gry przez gracza,
+      \item nagradzanie gracza za dobrą grę (poszerzanie klocków, gdy w ciągu ostatnich 10 ruchów jego klocki zmniejszyły się o niewiele pikseli)
+    \item możliwość wyboru skórki przez gracza (budowanie Pałacu czy MIM-u) - w zależności od tego wyboru interakcja z użytkownikiem może przebiegać nieco inaczej
+    \item budowa MIM-u (lądowanie klocków, przesuwanie widoku)
+    \item zapis wyniku dla MIM-u
+    \end{itemize}
+    \item\textbf{Prezentacja} - 05.06 - Prezentacja na zajęciach 
 \end{itemize}
 
 \section{Technologie}
@@ -64,6 +88,7 @@ Planujemy następujący harmonogram:
 \begin{itemize}
 \item\textbf{Repozytorium:} Github
 \item\textbf{Testy jednostkowe:} JUnit
+\item\textbf{Grafika:} GIMP
 \end{itemize}
 
 \end{document}
