@@ -13,7 +13,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.runner.RunWith;
-import palace2d.game.Block;
+import palace2d.game.Graphics.TextureHandler;
+import palace2d.game.ScreenActors.Block;
 import palace2d.game.ScreenActors.GameScreenActors;
 
 import java.util.Iterator;
@@ -29,7 +30,7 @@ public class GamesScreenActorsTest {
     @Before
     public void setUp() {
         actors = new GameScreenActors();
-        actors.initGameBlocks(actors.createTexture("../core/assets/block0.png"));
+        actors.initGameBlocks();
     }
 
     @Test
@@ -38,7 +39,7 @@ public class GamesScreenActorsTest {
         assertTrue("No such a file or directory",
                 Gdx.files.internal(path).exists());
 
-        Texture testTexture = actors.createTexture(path);
+        Texture testTexture = TextureHandler.createTexture(path);
         Pixmap result = new Pixmap(new FileHandle(path));
 
         assertEquals(testTexture.getTextureData().getHeight(), result.getHeight());
