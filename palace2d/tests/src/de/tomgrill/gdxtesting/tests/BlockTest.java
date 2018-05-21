@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import com.badlogic.gdx.Gdx;
 
 import de.tomgrill.gdxtesting.GdxTestRunner;
-import palace2d.game.Block;
+import palace2d.game.ScreenActors.Block;
 
 @RunWith(GdxTestRunner.class)
 public class BlockTest {

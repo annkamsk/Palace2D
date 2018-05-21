@@ -1,17 +1,13 @@
 package palace2d.game.ScreenActors;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import palace2d.game.Block;
+import palace2d.game.Graphics.PalaceTextureHandler;
+import palace2d.game.Graphics.TextureHandler;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class GameScreenActors {
-    private static final int MAX_BLOCKS = 20;
+    private static final int MAX_BLOCKS = 200;
     private static final int INIT_BLOCK_WIDTH = 578; // px
-    private static final int FIRST_MOVING_BLOCK_Y = 100;
 
     public final int BLOCK_HEIGHT = 60; //px
 
@@ -22,8 +18,22 @@ public class GameScreenActors {
 
     private List<Block> blocks;
 
+    private TextureHandler textureHandler;
+
     public GameScreenActors() {
-        blocks = new ArrayList<Block>();
+        blocks = new ArrayList<>();
+        textureHandler = new PalaceTextureHandler();
+    }
+
+    public void initGameBlocks() {
+        Block newBlock = new Block(textureHandler.getActualTexture(getBlockWidth()));
+        blocks.add(newBlock);
+        newBlock.spritePos(newBlock.getX(), newBlock.getY());
+    }
+
+
+    public void setActualBlockPosition(float x, float y) {
+        getActualBlock().spritePos(x, y);
     }
 
     public void setStackEdges(int width) {
@@ -31,25 +41,24 @@ public class GameScreenActors {
         actualStackRightEdge = actualStackLeftEdge + INIT_BLOCK_WIDTH;
     }
 
-    public Texture createTexture(String filename) {
-        return new Texture(Gdx.files.internal(filename));
+    public void prepareNewBlock() {
+        actualBlockNumber++;
     }
 
-    private void addInvisibleBlock(Texture blockTexture, int x, int y) {
-        Block block = new Block(blockTexture);
-        blocks.add(block);
 
-        block.spritePos(x, y);
-        block.setVisible(false);
+    public Block setNewBlock(int dropHeight) {
+        prepareNewBlock();
+
+        Block newBlock = new Block(textureHandler.getActualTexture(getBlockWidth()));
+        blocks.add(newBlock);
+
+        newBlock.trim(getBlockWidth());
+        newBlock.spritePos(actualStackLeftEdge,
+                blocks.get(actualBlockNumber - 1).getTop() + dropHeight);
+
+        return newBlock;
     }
 
-    public void initGameBlocks() {
-        for (int i = 0; i < MAX_BLOCKS; i++) {
-            addInvisibleBlock(createTexture("block" + i + ".png"),
-                    actualStackLeftEdge,
-                    FIRST_MOVING_BLOCK_Y);
-        }
-    }
 
     public void setDroppedBlockSizeAndPosition() {
         actualStackLeftEdge = Math.max(actualStackLeftEdge, (int) getActualBlock().getX());
@@ -60,36 +69,11 @@ public class GameScreenActors {
         setActualBlockPosition(actualStackLeftEdge, getActualBlock().getY());
     }
 
-    public void prepareNewBlock() {
-        actualBlockNumber++;
-    }
-
-    public Block setNewBlock(int dropHeight) {
-        Block newBlock = getActualBlock();
-
-        newBlock.trim(getBlockWidth());
-        newBlock.spritePos(actualStackLeftEdge,
-                blocks.get(actualBlockNumber - 1).getTop() + dropHeight);
-
-        return newBlock;
-    }
-
-    public void setActualBlockPosition(float x, float y) {
-        getActualBlock().spritePos(x, y);
-    }
-
     private void trimActualBlock() {
         if (actualStackLeftEdge < actualStackRightEdge)
             getActualBlock().trim(getBlockWidth());
     }
 
-    public void setActualBlockVisible() {
-        getActualBlock().setVisible(true);
-    }
-
-    public int getBlockWidth() {
-        return actualStackRightEdge - actualStackLeftEdge;
-    }
 
     public int getActualBlockNumber() {
         return actualBlockNumber;
@@ -97,6 +81,11 @@ public class GameScreenActors {
 
     public Block getActualBlock() {
         return blocks.get(actualBlockNumber);
+    }
+
+    public int getBlockWidth() {
+        return Math.min(actualStackRightEdge - actualStackLeftEdge,
+                textureHandler.getActualTextureWidth());
     }
 
     public Iterator<Block> getBlocksIterator() {
