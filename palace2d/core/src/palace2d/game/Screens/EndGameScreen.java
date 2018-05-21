@@ -1,12 +1,9 @@
 package palace2d.game.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Json;
 import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.ScoreBoard;
 
@@ -89,6 +86,7 @@ public class EndGameScreen extends PalaceScreen {
         top10.setX(Gdx.graphics.getWidth() / 2 - top10.getWidth() / 2);
         top10.setY(TOP10_LABEL_YPOSITION);
         stage.addActor(top10);
+
     }
 
     @Override
