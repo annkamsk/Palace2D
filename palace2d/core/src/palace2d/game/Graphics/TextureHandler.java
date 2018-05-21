@@ -21,13 +21,14 @@ public abstract class TextureHandler {
         textures = new ArrayList<>();
         textureChangeHandlers = new HashMap<>();
         initTextures();
+        initTextureChangeHandling();
     }
 
     public int getActualTextureWidth() {
         return textures.get(actualTextureNumber).getWidth();
     }
 
-    public int getNextTextureWidth() {
+    int getNextTextureWidth() {
         return textures.get(actualTextureNumber + 1).getWidth();
     }
 
@@ -49,6 +50,7 @@ public abstract class TextureHandler {
     }
 
     public abstract void initTextures();
+    abstract void initTextureChangeHandling();
     public abstract Texture getActualTexture(int blockWidth);
 
 }

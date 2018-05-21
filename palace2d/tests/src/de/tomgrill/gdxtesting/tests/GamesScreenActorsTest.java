@@ -35,7 +35,7 @@ public class GamesScreenActorsTest {
 
     @Test
     public void createTextureTest() {
-        String path = "../core/assets/block1.png";
+        String path = "../core/assets/blocks/block00.png";
         assertTrue("No such a file or directory",
                 Gdx.files.internal(path).exists());
 
@@ -50,14 +50,6 @@ public class GamesScreenActorsTest {
     public void initGameBlocksTest() {
         assertEquals(actors.getActualBlockNumber(), 0);
         assertTrue(actors.hasNextBlock());
-    }
-
-    @Test
-    public void initBlocksNotVisibleTest() {
-        Iterator<Block> iter = actors.getBlocksIterator();
-        while (iter.hasNext()) {
-            assertFalse(iter.next().isVisible());
-        }
     }
 
     private void testPosition(Block block, int x, int y) {

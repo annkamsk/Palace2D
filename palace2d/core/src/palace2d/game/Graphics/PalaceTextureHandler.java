@@ -15,11 +15,11 @@ public class PalaceTextureHandler extends TextureHandler {
 
     public PalaceTextureHandler() {
         super();
-        initTexturechangeHandling();
     }
 
     public void initTextures() {
-        try (Stream<Path> paths = Files.walk(Paths.get("blocks"))) {
+        try (Stream<Path> paths = Files.walk(Paths.get("blocks")
+        )) {
             paths
                     .filter(Files::isRegularFile)
                     .forEach((file) -> textures.add(createTexture(file
@@ -29,11 +29,12 @@ public class PalaceTextureHandler extends TextureHandler {
             Collections.sort(textures, Comparator.comparing(Object::toString));
         } catch (IOException e) {
             Gdx.app.log("info",
-                    "Block textures missing from assets/blocks directory.");
+                    "Block textures missing from core/assets/blocks directory" +
+                    ".");
         }
     }
 
-    private void initTexturechangeHandling() {
+    void initTextureChangeHandling() {
         textureChangeHandlers.put(0, (blockWidth) -> true);
         textureChangeHandlers.put(1, (blockWidth) -> true);
         textureChangeHandlers.put(2, (blockWidth) ->
