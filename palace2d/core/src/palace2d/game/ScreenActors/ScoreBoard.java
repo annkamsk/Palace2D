@@ -21,7 +21,6 @@ public class ScoreBoard extends Actor {
     private Preferences prefs;
     private HashMap<String, Integer> map;
     private String scoresString;
-    private Label top10;
     private Table gameScore;
     private int currentScore;
     final private String noScoresYet = "NO SCORES YET!";
@@ -34,23 +33,12 @@ public class ScoreBoard extends Actor {
         scoresString = prefs.getString("top10", noScoresYet);
         Json json = new Json();
         map = json.fromJson(HashMap.class, scoresString);
-        setTop10Graphics();
         gameScore = new Table(new Skin(Gdx.files
                 .internal("skins/glassy/skin/glassy-ui.json")));
         createScoreTable(map);
     }
 
-    private void setTop10Graphics() {
-        String top10Message = "SORRY, YOU'RE NOT IN TOP 10";
-        if (isInTop10()) {
-            top10Message = "YOU ARE IN TOP 10!";
 
-        }
-        top10 = new Label(top10Message, new Skin(Gdx.files
-                .internal("skins/glassy/skin/glassy-ui.json")));
-        top10.setX(Gdx.graphics.getWidth() / 2 - top10.getWidth() / 2);
-        top10.setY(130);
-    }
 
     public boolean isInTop10() {
         if (!scoresString.equals(noScoresYet)) {
@@ -136,7 +124,6 @@ public class ScoreBoard extends Actor {
     }
 
     public void display() {
-        getStage().addActor(top10);
         getStage().addActor(gameScore);
     }
 

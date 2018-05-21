@@ -13,6 +13,8 @@ import palace2d.game.ScreenActors.ScoreBoard;
 import java.util.*;
 
 public class EndGameScreen extends PalaceScreen {
+    private static final int TOP10_LABEL_YPOSITION = 130; // px
+
     private ScoreBoard scoreBoard;
     private TextButton saveTop10;
 
@@ -20,7 +22,12 @@ public class EndGameScreen extends PalaceScreen {
     public EndGameScreen(Palace2D game, int currentScore, int isWon) {
         super(game, "background.png");
         createScoreBoard(currentScore);
-        createScreenObjects(currentScore);
+        createScoreLabel(currentScore);
+        createTop10Label();
+        if (scoreBoard.isInTop10()) {
+            createTop10Button();
+        }
+        createNewGameButton();
     }
 
     private void createScoreBoard(int currentScore) {
@@ -63,39 +70,25 @@ public class EndGameScreen extends PalaceScreen {
         stage.addActor(saveTop10);
     }
 
-    private void createNewGameButton() {
-        TextButton playButton = new TextButton("NEW GAME", new Skin(Gdx.files
-                .internal("skins/glassy/skin/glassy-ui.json")), "small");
-
-        playButton.setBounds(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2,
-                10, playButton.getWidth(), 50);
-        playButton.addListener(new InputListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game));
-            }
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-
-        stage.addActor(playButton);
+    private void createScoreLabel(int currentScore) {
+        String title = "YOUR SCORE: " + String.valueOf(currentScore);
+        Label label = new Label(title, new Skin(Gdx.files
+                .internal("skins/glassy/skin/glassy-ui.json")));
+        stage.addActor(label);
     }
 
-    private void createScreenObjects(int currentScore) {
-        setBackgroundTexture();
-        String title = "YOUR SCORE: " + String.valueOf(currentScore);
-
-        Label text = new Label(title, new Skin(Gdx.files
-                .internal("skins/glassy/skin/glassy-ui.json")));
-        stage.addActor(text);
-
+    private void createTop10Label() {
+        String top10Message;
         if (scoreBoard.isInTop10()) {
-            createTop10Button();
+            top10Message = "YOU ARE IN TOP 10!";
+        } else {
+            top10Message = "SORRY, YOU'RE NOT IN TOP 10";
         }
-        createNewGameButton();
+        Label top10 = new Label(top10Message, new Skin(Gdx.files
+                .internal("skins/glassy/skin/glassy-ui.json")));
+        top10.setX(Gdx.graphics.getWidth() / 2 - top10.getWidth() / 2);
+        top10.setY(TOP10_LABEL_YPOSITION);
+        stage.addActor(top10);
     }
 
     @Override
