@@ -98,8 +98,11 @@ public class ScoreBoard extends Actor {
     }
 
     public void addScore(String username) {
-        removeWorstScore();
-        map.put(username, currentScore);
+        Integer usernameScore = map.get(username);
+        if (usernameScore == null || usernameScore < currentScore) {
+            removeWorstScore();
+            map.put(username, currentScore);
+        }
         String jsonString = new Json().toJson(map);
         prefs.putString("top10", jsonString);
         prefs.flush();
