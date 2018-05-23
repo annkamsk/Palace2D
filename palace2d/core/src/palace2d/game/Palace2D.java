@@ -13,8 +13,7 @@ public class Palace2D extends Game {
 	public static final String TITLE = "Palace2D";
 	public static final int V_WIDTH = 800;
 	public static final int V_HEIGHT = 600;
-
-	public OrthographicCamera camera;
+	public static final boolean TEST_MOD = false;
 
 	@Override
 	public void create () {

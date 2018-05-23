@@ -38,8 +38,6 @@ public class ScoreBoard extends Actor {
         createScoreTable(map);
     }
 
-
-
     public boolean isInTop10() {
         if (!scoresString.equals(noScoresYet)) {
             Gdx.app.log("info", map.toString());
@@ -62,7 +60,6 @@ public class ScoreBoard extends Actor {
         }
         return loser;
     }
-
 
     private void createScoreTable(HashMap<String, Integer> map) {
         float scorePanelWidth = Gdx.graphics.getWidth() * 0.8f; // 80 % of screen

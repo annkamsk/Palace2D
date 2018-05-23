@@ -24,7 +24,6 @@ public class GamesScreenActorsTest {
     private static final int TEST_BLOCK_WIDTH = 578;
     private static final int TEST_DROP_HEIGHT = 20;
 
-
     private GameScreenActors actors;
 
     @Before

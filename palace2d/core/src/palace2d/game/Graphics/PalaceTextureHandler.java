@@ -2,6 +2,7 @@ package palace2d.game.Graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import palace2d.game.Palace2D;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +12,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
+import static palace2d.game.Palace2D.TEST_MOD;
+
 public class PalaceTextureHandler extends TextureHandler {
 
     public PalaceTextureHandler() {
@@ -18,7 +21,13 @@ public class PalaceTextureHandler extends TextureHandler {
     }
 
     public void initTextures() {
-        try (Stream<Path> paths = Files.walk(Paths.get("blocks")
+        String path = "blocks";
+
+        if (TEST_MOD) {
+            path = "../core/assets/blocks";
+        }
+
+        try (Stream<Path> paths = Files.walk(Paths.get(path)
         )) {
             paths
                     .filter(Files::isRegularFile)
