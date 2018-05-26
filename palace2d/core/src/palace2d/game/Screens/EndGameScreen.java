@@ -5,20 +5,29 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import palace2d.game.Graphics.TextureHandler;
 import palace2d.game.Palace2D;
+import palace2d.game.ScreenActors.Block;
+import palace2d.game.ScreenActors.GameScreenActors;
 import palace2d.game.ScreenActors.ScoreBoard;
 
 import java.util.*;
+import java.util.List;
 
 public class EndGameScreen extends PalaceScreen {
     private static final int TOP10_LABEL_YPOSITION = 130; // px
+    private static final float PALACE_VIEW_HEIGHT = 550; // px
+    private static final float PALACE_VIEW_WIDTH = 320; // px
+    private static final int PALACE_VIEW_YPOSTION = 20; // px
 
     private ScoreBoard scoreBoard;
     private TextButton saveTop10;
 
 
-    public EndGameScreen(Palace2D game, int currentScore, int isWon) {
+    public EndGameScreen(Palace2D game, int currentScore, int isWon,
+                         GameScreenActors actors) {
         super(game, "background.png");
+        this.actors = actors;
         createScoreBoard(currentScore);
         createScoreLabel(currentScore);
         createTop10Label();
@@ -26,6 +35,7 @@ public class EndGameScreen extends PalaceScreen {
             createTop10Button();
         }
         createNewGameButton();
+        createPalaceView();
     }
 
     private void createScoreBoard(int currentScore) {
@@ -88,6 +98,27 @@ public class EndGameScreen extends PalaceScreen {
         top10.setY(TOP10_LABEL_YPOSITION);
         stage.addActor(top10);
 
+    }
+
+    private void createPalaceView() {
+        float ratio = Math.min(1, Float.min(PALACE_VIEW_HEIGHT / actors
+                .getPalaceHeight(), PALACE_VIEW_WIDTH / actors
+                .getPalaceWidth()));
+
+        Gdx.app.log("info", Float.toString(ratio));
+
+        float YPosition = 0;
+        for (Iterator<Block> iter = actors.getBlocksIterator(); iter.hasNext
+                (); ) {
+            Block block = iter.next();
+            block.setPosition(block.getX() / Palace2D.V_WIDTH * PALACE_VIEW_WIDTH,
+                    PALACE_VIEW_YPOSTION + block.getY() - YPosition);
+            YPosition += block.getHeight() - block.getHeight() * ratio;
+            block.scale(ratio);
+            if (iter.hasNext()) {
+                stage.addActor(block);
+            }
+        }
     }
 
     @Override

@@ -17,6 +17,9 @@ public class GameScreenActors {
     private static int actualStackRightEdge; // px
 
     private List<Block> blocks;
+    private int palaceHeight = 0;
+    private int palaceLeftEdge; // px
+    private int palaceRightEdge; // px
 
     private TextureHandler textureHandler;
 
@@ -28,6 +31,7 @@ public class GameScreenActors {
     public void initGameBlocks() {
         Block newBlock = new Block(textureHandler.getActualTexture(getBlockWidth()));
         blocks.add(newBlock);
+        palaceHeight = BLOCK_HEIGHT;
         newBlock.spritePos(newBlock.getX(), newBlock.getY());
     }
 
@@ -39,6 +43,8 @@ public class GameScreenActors {
     public void setStackEdges(int width) {
         actualStackLeftEdge = width / 2 - INIT_BLOCK_WIDTH / 2;
         actualStackRightEdge = actualStackLeftEdge + INIT_BLOCK_WIDTH;
+        palaceLeftEdge = actualStackLeftEdge;
+        palaceRightEdge = actualStackRightEdge;
     }
 
     public void prepareNewBlock() {
@@ -51,6 +57,7 @@ public class GameScreenActors {
 
         Block newBlock = new Block(textureHandler.getActualTexture(getBlockWidth()));
         blocks.add(newBlock);
+        palaceHeight += newBlock.getHeight();
 
         newBlock.trim(getBlockWidth());
         newBlock.spritePos(actualStackLeftEdge,
@@ -64,6 +71,8 @@ public class GameScreenActors {
         actualStackLeftEdge = Math.max(actualStackLeftEdge, (int) getActualBlock().getX());
         actualStackRightEdge = Math.min(actualStackRightEdge,
                 (int) getActualBlock().getX() + (int) getActualBlock().getWidth());
+        palaceLeftEdge = Math.min(actualStackLeftEdge, palaceLeftEdge);
+        palaceRightEdge = Math.max(actualStackRightEdge, palaceRightEdge);
 
         trimActualBlock();
         setActualBlockPosition(actualStackLeftEdge, getActualBlock().getY());
@@ -94,5 +103,13 @@ public class GameScreenActors {
 
     public boolean hasNextBlock() {
         return !(actualBlockNumber == MAX_BLOCKS);
+    }
+
+    public int getPalaceHeight() {
+        return palaceHeight;
+    }
+
+    public int getPalaceWidth() {
+        return palaceRightEdge - palaceLeftEdge;
     }
 }

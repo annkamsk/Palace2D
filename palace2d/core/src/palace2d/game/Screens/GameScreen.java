@@ -130,11 +130,11 @@ public class GameScreen extends PalaceScreen {
                 Gdx.app.log("info", "YOU WIN");
                 Gdx.app.log("info", "YOU LOSE");
                 game.setScreen(new EndGameScreen(game,actors
-                        .getActualBlockNumber() - 1, WON));
+                        .getActualBlockNumber() - 1, WON, actors));
             } else {
                 Gdx.app.log("info", "YOU LOSE");
                 game.setScreen(new EndGameScreen(game,actors
-                        .getActualBlockNumber() - 1, LOST));
+                        .getActualBlockNumber() - 1, LOST, actors));
             }
         }
     }
@@ -161,7 +161,7 @@ public class GameScreen extends PalaceScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new EndGameScreen(game, actors
-                        .getActualBlockNumber() - 1, GAVEUP));
+                        .getActualBlockNumber() - 1, GAVEUP, actors));
             }
 
             @Override
