@@ -15,8 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// TODO wczytywanie wejścia: username nie może być ""
-
 public class ScoreBoard extends Actor {
     private Preferences prefs;
     private HashMap<String, Integer> map;

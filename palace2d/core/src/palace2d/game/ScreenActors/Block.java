@@ -20,6 +20,11 @@ public class Block extends Actor {
         this.sprite.setSize(width, height);
     }
 
+    public void scale(float ratio) {
+        this.sprite.setSize(sprite.getWidth() * ratio, sprite.getHeight() *
+                ratio);
+    }
+
     public Sprite getSprite() {
         return sprite;
     }
