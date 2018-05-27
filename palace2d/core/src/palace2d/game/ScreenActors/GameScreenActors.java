@@ -2,6 +2,9 @@ package palace2d.game.ScreenActors;
 
 import palace2d.game.Graphics.PalaceTextureHandler;
 import palace2d.game.Graphics.TextureHandler;
+import palace2d.game.Palace2D;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 import java.util.*;
 
@@ -51,6 +54,15 @@ public class GameScreenActors {
         actualBlockNumber++;
     }
 
+    private int randBlockPosition() {
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
+
+        if (randomNum > 0) {
+            return Palace2D.V_WIDTH + getBlockWidth();
+        }
+
+        return (-1) * getBlockWidth();
+    }
 
     public Block setNewBlock(int dropHeight) {
         prepareNewBlock();
@@ -60,7 +72,7 @@ public class GameScreenActors {
         palaceHeight += newBlock.getHeight();
 
         newBlock.trim(getBlockWidth());
-        newBlock.spritePos(actualStackLeftEdge,
+        newBlock.spritePos(randBlockPosition(),
                 blocks.get(actualBlockNumber - 1).getTop() + dropHeight);
 
         return newBlock;
