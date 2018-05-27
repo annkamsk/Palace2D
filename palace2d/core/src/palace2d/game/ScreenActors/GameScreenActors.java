@@ -151,6 +151,10 @@ public class GameScreenActors {
         return Math.min(getStackSize(), textureHandler.getActualTextureWidth());
     }
 
+    public float getBlockHeight() {
+        return blocks.get(actualBlockNumber).getHeight();
+    }
+
     public boolean isBonusActive() {
         return bonusActive;
     }

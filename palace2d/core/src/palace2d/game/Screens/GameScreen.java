@@ -16,7 +16,7 @@ import java.util.Iterator;
 public class GameScreen extends PalaceScreen {
     private static final int DROP_HEIGHT = 20; // px
     private static final float BLOCK_DROP_DURATION = 0.25f;
-    private static final float BLOCK_MOVE_DURATION = 1f;
+    private static final float BLOCK_MOVE_DURATION = 0.8f;
     private static final float CAMERA_SMOOTH = 1f;
 
     // TODO przerobić na klasy stan, w których będą przechowywane funkcje
@@ -120,7 +120,7 @@ public class GameScreen extends PalaceScreen {
                             ));
 
                     if (myBlock.getY() > 3 * actors.BLOCK_HEIGHT) {
-                        moveView(0f, actors.BLOCK_HEIGHT);
+                        moveView(0f, actors.getBlockHeight());
                     }
 
                     return true;
