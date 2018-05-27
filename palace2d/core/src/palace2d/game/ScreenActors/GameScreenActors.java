@@ -11,10 +11,10 @@ import java.util.*;
 public class GameScreenActors {
     private static final int MAX_BLOCKS = 200;
     private static final int INIT_BLOCK_WIDTH = 578; // px
+    private static final int BONUS_BLOCK_AFTER = 3;
+    private static final int BONUS_MAX_PX_DIFF = 100;
 
     public final int BLOCK_HEIGHT = 60; //px
-
-    private int actualBlockNumber = 0;
 
     private static int actualStackLeftEdge; // px
     private static int actualStackRightEdge; // px
@@ -23,6 +23,10 @@ public class GameScreenActors {
     private int palaceHeight = 0;
     private int palaceLeftEdge; // px
     private int palaceRightEdge; // px
+    private int actualBlockNumber = 0;
+    private int lastBonusBlockNumber = 0;
+    private float lastBonusBlockWidth = INIT_BLOCK_WIDTH; // default = 578
+    private boolean bonusActive = false;
 
     private TextureHandler textureHandler;
 
@@ -64,14 +68,47 @@ public class GameScreenActors {
         return (-1) * getBlockWidth();
     }
 
+    private int getStackSize() {
+        return actualStackRightEdge - actualStackLeftEdge;
+    }
+
+    private boolean isActualStackSmallerThanPalaceTexture() {
+        return getStackSize() < textureHandler.getActualTextureWidth();
+    }
+
+    private boolean canBeBonusObtain() {
+        return isActualStackSmallerThanPalaceTexture() &&
+                actualBlockNumber - lastBonusBlockNumber >= BONUS_BLOCK_AFTER &&
+                lastBonusBlockWidth <=
+                        blocks.get(actualBlockNumber - 1).getWidth() + BONUS_MAX_PX_DIFF;
+    }
+
+    private float calcBlockWidth() {
+        if (canBeBonusObtain()) {
+            bonusActive = true;
+            lastBonusBlockNumber = actualBlockNumber;
+            lastBonusBlockWidth = Math.min(getBlockWidth() + BONUS_MAX_PX_DIFF,
+                    textureHandler.getActualTextureWidth());
+            return lastBonusBlockWidth;
+        } else {
+            if (blocks.size() > lastBonusBlockNumber + BONUS_BLOCK_AFTER) {
+                lastBonusBlockNumber++;
+                lastBonusBlockWidth = blocks.get(lastBonusBlockNumber).getWidth();
+            }
+
+            return getBlockWidth();
+        }
+    }
+
     public Block setNewBlock(int dropHeight) {
         prepareNewBlock();
+        float width = calcBlockWidth();
 
-        Block newBlock = new Block(textureHandler.getActualTexture(getBlockWidth()));
+        Block newBlock = new Block(textureHandler.getActualTexture((int)width));
         blocks.add(newBlock);
         palaceHeight += newBlock.getHeight();
 
-        newBlock.trim(getBlockWidth());
+        newBlock.trim((int)width);
         newBlock.spritePos(randBlockPosition(),
                 blocks.get(actualBlockNumber - 1).getTop() + dropHeight);
 
@@ -80,9 +117,15 @@ public class GameScreenActors {
 
 
     public void setDroppedBlockSizeAndPosition() {
-        actualStackLeftEdge = Math.max(actualStackLeftEdge, (int) getActualBlock().getX());
-        actualStackRightEdge = Math.min(actualStackRightEdge,
-                (int) getActualBlock().getX() + (int) getActualBlock().getWidth());
+        if (!bonusActive) {
+            actualStackLeftEdge = Math.max(actualStackLeftEdge, (int) getActualBlock().getX());
+            actualStackRightEdge = Math.min(actualStackRightEdge,
+                    (int) getActualBlock().getX() + (int) getActualBlock().getWidth());
+        } else {
+            bonusActive = false;
+            actualStackLeftEdge = (int) getActualBlock().getX();
+            actualStackRightEdge = (int) getActualBlock().getX() + (int) getActualBlock().getWidth();
+        }
         palaceLeftEdge = Math.min(actualStackLeftEdge, palaceLeftEdge);
         palaceRightEdge = Math.max(actualStackRightEdge, palaceRightEdge);
 
@@ -105,8 +148,11 @@ public class GameScreenActors {
     }
 
     public int getBlockWidth() {
-        return Math.min(actualStackRightEdge - actualStackLeftEdge,
-                textureHandler.getActualTextureWidth());
+        return Math.min(getStackSize(), textureHandler.getActualTextureWidth());
+    }
+
+    public boolean isBonusActive() {
+        return bonusActive;
     }
 
     public Iterator<Block> getBlocksIterator() {

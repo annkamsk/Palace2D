@@ -3,6 +3,8 @@ package palace2d.game.Screens;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import palace2d.game.ScreenActors.Block;
@@ -14,7 +16,7 @@ import java.util.Iterator;
 public class GameScreen extends PalaceScreen {
     private static final int DROP_HEIGHT = 20; // px
     private static final float BLOCK_DROP_DURATION = 0.25f;
-    private static final float BLOCK_MOVE_DURATION = 0.5f;
+    private static final float BLOCK_MOVE_DURATION = 1f;
     private static final float CAMERA_SMOOTH = 1f;
 
     // TODO przerobić na klasy stan, w których będą przechowywane funkcje
@@ -24,6 +26,7 @@ public class GameScreen extends PalaceScreen {
     private int GAVEUP = 0;
 
     private TextButton endButton;
+    private Container<Label> bonusBlockLabel;
 
     public GameScreen(Palace2D game) {
         super(game, "background.png");
@@ -44,8 +47,30 @@ public class GameScreen extends PalaceScreen {
 
     void createGameObjects() {
         setBackgroundTexture();
+        createBonusBlockLabel();
         initGameBlocks();
         setActors();
+    }
+
+    private void createBonusBlockLabel() {
+        String title = "BONUS BLOCK SIZE ACTIVATED!";
+        Label label = new Label(title, new Skin(Gdx.files
+                .internal("skins/glassy/skin/glassy-ui.json")));
+        bonusBlockLabel = new Container<>(label);
+        bonusBlockLabel.setTransform(true);
+        bonusBlockLabel.setSize(100, 60); // TODO jakos ladnie te px zrobic
+        bonusBlockLabel.setOrigin(bonusBlockLabel.getWidth() / 2,
+                bonusBlockLabel.getHeight() / 2);
+        bonusBlockLabel.setPosition(Gdx.graphics.getWidth() / 2 - bonusBlockLabel.getWidth() / 2,
+                5 * actors.BLOCK_HEIGHT + 150);
+        bonusBlockLabel.setVisible(false);
+        stage.addActor(bonusBlockLabel);
+    }
+
+    private void showBonusBlockLabelAction() {
+        SequenceAction seq = new SequenceAction(Actions.show(), Actions.scaleTo(2f, 2f, 0.75f),
+                Actions.scaleTo(1f, 1f, 0.75f), Actions.hide());
+        bonusBlockLabel.addAction(seq);
     }
 
     private void setActors() {
@@ -67,6 +92,10 @@ public class GameScreen extends PalaceScreen {
 
     private void makeBlockReady(Block block) {
         block.addAction(sideToSideAction(block));
+        if (actors.isBonusActive()) {
+            System.out.println("bonus activated");
+            showBonusBlockLabelAction();
+        }
         stage.setKeyboardFocus(block);
 
         block.addListener(new InputListener() {
@@ -90,7 +119,7 @@ public class GameScreen extends PalaceScreen {
                                     }
                             ));
 
-                    if (myBlock.getY() > 4 * actors.BLOCK_HEIGHT) {
+                    if (myBlock.getY() > 3 * actors.BLOCK_HEIGHT) {
                         moveView(0f, actors.BLOCK_HEIGHT);
                     }
 
@@ -190,6 +219,7 @@ public class GameScreen extends PalaceScreen {
         camera.moveBy(x, y);
         backgroundImg.addAction(Actions.moveBy(x, y));
         endButton.addAction(Actions.moveBy(x, y));
+        bonusBlockLabel.addAction(Actions.moveBy(x, y));
     }
 
 
