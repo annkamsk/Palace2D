@@ -10,6 +10,16 @@ public class Block extends Actor {
 
     private final int height;
 
+    public boolean getLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    private boolean left = false;
+
     public Block(Texture tex) {
         sprite = new Sprite(tex);
         height = tex.getHeight();
