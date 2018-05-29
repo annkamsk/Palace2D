@@ -37,5 +37,14 @@ public class MIMTextureHandler extends TextureHandler {
         backgroundTexture = createTexture("background_mim.png");
     }
 
+    @Override
+    public String getScoreLabelText() {
+        return "ELITARNOSC: ";
+    }
+
+    public String getFinalScoreLabelText() {
+        return "YOUR ELITARNOSC: ";
+    }
+
 
 }
