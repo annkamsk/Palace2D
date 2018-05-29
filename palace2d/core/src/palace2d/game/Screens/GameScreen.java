@@ -185,14 +185,14 @@ public class GameScreen extends PalaceScreen {
         SequenceAction overallSequence = new SequenceAction();
 
         if (!block.getLeft()) {
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
+            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
             overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), BLOCK_MOVE_DURATION));
+                    block.getY(), blockMoveDuration));
             block.setLeft(true);
         } else {
             overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), BLOCK_MOVE_DURATION));
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
+                    block.getY(), blockMoveDuration));
+            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
             block.setLeft(false);
 
         }
