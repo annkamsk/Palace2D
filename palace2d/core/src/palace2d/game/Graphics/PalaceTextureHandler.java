@@ -1,5 +1,7 @@
 package palace2d.game.Graphics;
 
+import palace2d.game.Palace2D;
+
 public class PalaceTextureHandler extends TextureHandler {
     private static final int INITIAL_BLOCK_HEIGHT = 60; // px
 
@@ -27,7 +29,12 @@ public class PalaceTextureHandler extends TextureHandler {
     }
 
     void setBackgroundTexture() {
-        backgroundTexture = createTexture("background.png");
+        String filename = "background.png";
+        if (Palace2D.TEST_MOD) {
+            filename = "../core/assets/" + filename;
+        }
+
+        backgroundTexture = createTexture(filename);
     }
 
 }
