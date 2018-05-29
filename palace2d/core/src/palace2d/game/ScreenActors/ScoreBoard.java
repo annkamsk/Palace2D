@@ -30,7 +30,10 @@ public class ScoreBoard extends Actor {
         prefs = Gdx.app.getPreferences("MyPreferences");
         scoresString = prefs.getString("top10", noScoresYet);
         Json json = new Json();
-        map = json.fromJson(HashMap.class, scoresString);
+        if (!scoresString.equals(noScoresYet))
+            map = json.fromJson(HashMap.class, scoresString);
+        else
+            map = new HashMap<String, Integer>() ;
         gameScore = new Table(new Skin(Gdx.files
                 .internal("skins/glassy/skin/glassy-ui.json")));
         createScoreTable(map);
@@ -61,7 +64,7 @@ public class ScoreBoard extends Actor {
 
     private void createScoreTable(HashMap<String, Integer> map) {
         float scorePanelWidth = Gdx.graphics.getWidth() * 0.8f; // 80 % of screen
-        float scorePanelHeight = Gdx.graphics.getHeight() * 0.055f * map.size(); // 20 % of screen
+        float scorePanelHeight = Gdx.graphics.getHeight() * 0.055f * map.size();
 
         gameScore.remove();
         gameScore.clearChildren();
