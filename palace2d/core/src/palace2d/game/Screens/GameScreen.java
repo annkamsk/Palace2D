@@ -305,6 +305,7 @@ public class GameScreen extends PalaceScreen {
         camera.moveBy(x, y);
         backgroundImg.addAction(Actions.moveBy(x, y));
         endButton.addAction(Actions.moveBy(x, y));
+        pauseButton.addAction(Actions.moveBy(x, y));
         bonusBlockLabel.addAction(Actions.moveBy(x, y));
         scoreLabel.addAction(Actions.moveBy(x, y));
     }
