@@ -17,7 +17,6 @@ import java.util.Iterator;
 public class GameScreen extends PalaceScreen {
     private static final int DROP_HEIGHT = 20; // px
     private static final float BLOCK_DROP_DURATION = 0.25f;
-    private static final float BLOCK_MOVE_DURATION = 0.8f;
     private static final float CAMERA_SMOOTH = 1f;
 
     // TODO przerobić na klasy stan, w których będą przechowywane funkcje
@@ -28,9 +27,12 @@ public class GameScreen extends PalaceScreen {
 
     private TextButton endButton;
     private Container<Label> bonusBlockLabel;
+    private  float blockMoveDuration = 0.8f;
 
-    public GameScreen(Palace2D game, TextureHandler textureHandler) {
+    public GameScreen(Palace2D game, TextureHandler textureHandler,
+                      float blockMoveDuration) {
         super(game, textureHandler);
+        this.blockMoveDuration = blockMoveDuration;
         createGameObjects();
     }
 
@@ -135,13 +137,13 @@ public class GameScreen extends PalaceScreen {
         SequenceAction overallSequence = new SequenceAction();
 
         if (block.getX() > 0) {
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
+            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
             overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), BLOCK_MOVE_DURATION));
+                    block.getY(), blockMoveDuration));
         } else {
             overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), BLOCK_MOVE_DURATION));
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
+                    block.getY(), blockMoveDuration));
+            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
         }
 
         RepeatAction infiniteLoop = new RepeatAction();
