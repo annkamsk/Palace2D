@@ -30,9 +30,9 @@ public class GameScreenActors {
 
     private TextureHandler textureHandler;
 
-    public GameScreenActors() {
+    public GameScreenActors(TextureHandler textureHandler) {
         blocks = new ArrayList<>();
-        textureHandler = new PalaceTextureHandler();
+        this.textureHandler = textureHandler;
     }
 
     public void initGameBlocks() {

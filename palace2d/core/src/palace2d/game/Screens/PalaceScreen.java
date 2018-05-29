@@ -26,15 +26,19 @@ public abstract class PalaceScreen implements Screen {
     GameScreenActors actors;
     Texture backgroundTexture;
     Image backgroundImg;
+    TextureHandler textureHandler;
 
-    public PalaceScreen(Palace2D game, String backgroundTextureFileName) {
+    // TODO wywalic backroundTexture
+    public PalaceScreen(Palace2D game, String backgroundTextureFileName,
+                        TextureHandler textureHandler) {
         this.game = game;
         this.camera = new GameCamera();
         this.camera.setOrtho(Palace2D.V_WIDTH, Palace2D.V_HEIGHT);
         this.stage = new Stage(new FitViewport(Palace2D.V_WIDTH,
                 Palace2D.V_HEIGHT, this.camera.getCamera()));
-        this.actors = new GameScreenActors();
+        this.actors = new GameScreenActors(textureHandler);
         this.backgroundTextureFileName = backgroundTextureFileName;
+        this.textureHandler = textureHandler;
         setBackgroundTexture();
     }
 
@@ -63,7 +67,7 @@ public abstract class PalaceScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer,
                                 int button) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, textureHandler));
             }
 
             @Override

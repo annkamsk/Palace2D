@@ -25,8 +25,8 @@ public class EndGameScreen extends PalaceScreen {
 
 
     public EndGameScreen(Palace2D game, int currentScore, int isWon,
-                         GameScreenActors actors) {
-        super(game, "background.png");
+                         GameScreenActors actors, TextureHandler textureHandler) {
+        super(game, "background.png", textureHandler);
         this.actors = actors;
         createScoreBoard(currentScore);
         createScoreLabel(currentScore);
