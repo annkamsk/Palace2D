@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import palace2d.game.Graphics.MIMTextureHandler;
+import palace2d.game.Graphics.PalaceTextureHandler;
 import palace2d.game.Graphics.TextureHandler;
 import palace2d.game.ScreenActors.Block;
 import palace2d.game.Palace2D;
@@ -27,7 +29,7 @@ public class GameScreen extends PalaceScreen {
 
     private TextButton endButton;
     private Container<Label> bonusBlockLabel;
-    private  float blockMoveDuration = 0.8f;
+    private float blockMoveDuration = 0.8f;
 
     public GameScreen(Palace2D game, TextureHandler textureHandler,
                       float blockMoveDuration) {
@@ -122,7 +124,10 @@ public class GameScreen extends PalaceScreen {
                                     }
                             ));
 
-                    if (myBlock.getY() > 3 * textureHandler.getInitalBlockHeight()) {
+                    if ((textureHandler instanceof MIMTextureHandler &&
+                            myBlock.getY() > 10 * textureHandler.getInitalBlockHeight()) ||
+                            (textureHandler instanceof PalaceTextureHandler &&
+                                    myBlock.getY() > 4 * textureHandler.getInitalBlockHeight())) {
                         moveView(0f, actors.getBlockHeight());
                     }
 
@@ -167,11 +172,11 @@ public class GameScreen extends PalaceScreen {
             if (gameWon()) {
                 Gdx.app.log("info", "YOU WIN");
                 Gdx.app.log("info", "YOU LOSE");
-                game.setScreen(new EndGameScreen(game,actors
+                game.setScreen(new EndGameScreen(game, actors
                         .getActualBlockNumber() - 1, WON, actors, textureHandler));
             } else {
                 Gdx.app.log("info", "YOU LOSE");
-                game.setScreen(new EndGameScreen(game,actors
+                game.setScreen(new EndGameScreen(game, actors
                         .getActualBlockNumber() - 1, LOST, actors, textureHandler));
             }
         }
