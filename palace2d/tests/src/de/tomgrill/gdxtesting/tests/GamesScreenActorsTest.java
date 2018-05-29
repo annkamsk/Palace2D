@@ -15,6 +15,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.runner.RunWith;
+import palace2d.game.Graphics.PalaceTextureHandler;
 import palace2d.game.Graphics.TextureHandler;
 import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.Block;
@@ -41,7 +42,7 @@ public class GamesScreenActorsTest {
 
     @Before
     public void setUp() {
-        actors = new GameScreenActors();
+        actors = new GameScreenActors(new PalaceTextureHandler());
         actors.initGameBlocks();
     }
 

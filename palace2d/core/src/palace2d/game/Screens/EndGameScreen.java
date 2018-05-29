@@ -25,8 +25,9 @@ public class EndGameScreen extends PalaceScreen {
 
 
     public EndGameScreen(Palace2D game, int currentScore, int isWon,
-                         GameScreenActors actors) {
-        super(game, "background.png");
+                         GameScreenActors actors,
+                         TextureHandler textureHandler) {
+        super(game, textureHandler);
         this.actors = actors;
         createScoreBoard(currentScore);
         createScoreLabel(currentScore);
@@ -82,7 +83,8 @@ public class EndGameScreen extends PalaceScreen {
     }
 
     private void createScoreLabel(int currentScore) {
-        String title = "YOUR SCORE: " + String.valueOf(currentScore);
+        String title = textureHandler.getFinalScoreLabelText() +
+                       String.valueOf(currentScore);
         Label label = new Label(title, new Skin(Gdx.files
                 .internal("skins/glassy/skin/glassy-ui.json")));
         label.setPosition(10, 5);
@@ -111,6 +113,7 @@ public class EndGameScreen extends PalaceScreen {
                 .getPalaceWidth()));
 
         float YPosition = 0;
+        float previousYPosition = 0;
         for (Iterator<Block> iter = actors.getBlocksIterator(); iter.hasNext
                 (); ) {
             Block block = iter.next();
@@ -118,7 +121,8 @@ public class EndGameScreen extends PalaceScreen {
             block.scale(ratio);
             block.spritePos(block.getX() / Palace2D.V_WIDTH *
                             PALACE_VIEW_WIDTH,
-                    PALACE_VIEW_YPOSTION + block.getY() - YPosition);
+                    PALACE_VIEW_YPOSTION + block.getY() - previousYPosition);
+            previousYPosition = YPosition;
             if (iter.hasNext()) {
                 stage.addActor(block);
             }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -17,31 +18,35 @@ import palace2d.game.ScreenActors.GameScreenActors;
 import palace2d.game.Graphics.TextureHandler;
 
 public abstract class PalaceScreen implements Screen {
+    private static final int BACK_BUTTON_YPOSITION = 10; // px
+    private static final int BACK_BUTTON_HEIGHT = 50; // px
     private static final int NEWGAME_BUTTON_YPOSITION = 10; // px
     private static final int BUTTON_HEIGHT = 50; // px
-    private final String backgroundTextureFileName;
+    private static final float INFO_LABEL_HEIGHT = 500;
+
     Stage stage;
     Palace2D game;
     GameCamera camera;
     GameScreenActors actors;
     Texture backgroundTexture;
     Image backgroundImg;
+    TextureHandler textureHandler;
 
-    public PalaceScreen(Palace2D game, String backgroundTextureFileName) {
+    public PalaceScreen(Palace2D game,
+                        TextureHandler textureHandler) {
         this.game = game;
         this.camera = new GameCamera();
         this.camera.setOrtho(Palace2D.V_WIDTH, Palace2D.V_HEIGHT);
         this.stage = new Stage(new FitViewport(Palace2D.V_WIDTH,
                 Palace2D.V_HEIGHT, this.camera.getCamera()));
-        this.actors = new GameScreenActors();
-        this.backgroundTextureFileName = backgroundTextureFileName;
+        this.actors = new GameScreenActors(textureHandler);
+        this.textureHandler = textureHandler;
         setBackgroundTexture();
     }
 
 
     void setBackgroundTexture() {
-        backgroundTexture = TextureHandler.createTexture
-                (backgroundTextureFileName);
+        backgroundTexture = textureHandler.getBackgroundTexture();
 
         backgroundImg = TextureHandler.getActorFromTexture
                 (backgroundTexture, 0, 0,
@@ -63,7 +68,40 @@ public abstract class PalaceScreen implements Screen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer,
                                 int button) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new LevelSelectScreen(game, textureHandler));
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
+                return true;
+            }
+        });
+
+        stage.addActor(playButton);
+    }
+
+    void createInfoLabel(String title) {
+        Label label = new Label(title, new Skin(Gdx.files
+                .internal("skins/glassy/skin/glassy-ui.json")));
+        label.setPosition(Gdx.graphics.getWidth() / 2 - label
+                .getWidth() / 2, INFO_LABEL_HEIGHT);
+        stage.addActor(label);
+    }
+
+    void createBackButton(PalaceScreen screen) {
+        TextButton playButton = new TextButton("Back", new Skin(Gdx.files
+                .internal("skins/glassy/skin/glassy-ui.json")), "small");
+
+        playButton.setBounds(Gdx.graphics.getWidth() / 2 - playButton
+                        .getWidth () / 2,
+                BACK_BUTTON_YPOSITION, playButton.getWidth(),
+                BACK_BUTTON_HEIGHT);
+        playButton.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer,
+                                int button) {
+                game.setScreen(screen);
             }
 
             @Override
