@@ -48,7 +48,7 @@ public class EndGameScreen extends PalaceScreen {
         saveTop10 = new TextButton("SAVE YOUR SCORE", new Skin(Gdx.files
                 .internal("skins/glassy/skin/glassy-ui.json")), "small");
 
-        saveTop10.setBounds(550,
+        saveTop10.setBounds(Gdx.graphics.getWidth() / 2 - saveTop10.getWidth() / 2,
                 70, saveTop10.getWidth(), 50);
 
         saveTop10.addListener(new InputListener() {

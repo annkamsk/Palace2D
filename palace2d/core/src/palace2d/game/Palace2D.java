@@ -31,11 +31,4 @@ public class Palace2D extends Game {
 	public void dispose () {
 	}
 
-//	public boolean isTestMod() {
-//	    return this.testMod;
-//    }
-//
-//    public void setTestMod(boolean testMod) {
-//        this.testMod = testMod;
-//    }
 }
