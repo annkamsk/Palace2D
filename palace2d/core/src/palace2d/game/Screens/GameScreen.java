@@ -27,10 +27,19 @@ public class GameScreen extends PalaceScreen {
     private int LOST = -1;
     private int GAVEUP = 0;
 
+    public enum State
+    {
+        PAUSE,
+        RUN
+    }
+
+    private State state = State.RUN;
+    private TextButton endButton;
+    private TextButton pauseButton;
+    private Label scoreLabel;
+  
     private int score = 0;
 
-    private TextButton endButton;
-    private Label scoreLabel;
     private Container<Label> bonusBlockLabel;
     private float blockMoveDuration = 0.8f;
 
@@ -51,6 +60,17 @@ public class GameScreen extends PalaceScreen {
 
     private boolean gameContinues() {
         return !gameLost() && !gameWon();
+    }
+
+    @Override
+    public void pause() {
+        actors.getActualBlock().clearActions();
+    }
+
+    @Override
+    public void resume() {
+        Block block = actors.getActualBlock();
+        block.addAction(sideToSideAction(block));
     }
 
     void createGameObjects() {
@@ -164,19 +184,17 @@ public class GameScreen extends PalaceScreen {
     private Action sideToSideAction(Block block) {
         SequenceAction overallSequence = new SequenceAction();
 
-        if (block.getX() > 0) {
-            overallSequence.addAction(
-                    Actions.moveTo(0, block.getY(), blockMoveDuration));
-            overallSequence.addAction(
-                    Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                            block.getY(), blockMoveDuration));
-        }
-        else {
-            overallSequence.addAction(
-                    Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                            block.getY(), blockMoveDuration));
-            overallSequence.addAction(
-                    Actions.moveTo(0, block.getY(), blockMoveDuration));
+        if (!block.getLeft()) {
+            overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
+            overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
+                    block.getY(), BLOCK_MOVE_DURATION));
+            block.setLeft(true);
+        } else {
+            overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
+                    block.getY(), BLOCK_MOVE_DURATION));
+            overallSequence.addAction(Actions.moveTo(0, block.getY(), BLOCK_MOVE_DURATION));
+            block.setLeft(false);
+
         }
 
         RepeatAction infiniteLoop = new RepeatAction();
@@ -218,8 +236,8 @@ public class GameScreen extends PalaceScreen {
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                Gdx.app.log("Image ClickListener",
-                        "keyDown. keycode=" + keycode);
+                Gdx.app.log("Image ClickListener", "keyDown. keycode=" + keycode + ", state=" + state);
+
                 return true;
             }
         });
@@ -248,10 +266,37 @@ public class GameScreen extends PalaceScreen {
         stage.addActor(endButton);
     }
 
+    private void createPauseButton() {
+        pauseButton = new TextButton("PAUSE", new Skin(Gdx.files
+                .internal
+                        ("skins/glassy/skin/glassy-ui.json")), "small");
+        pauseButton.setBounds(Gdx.graphics.getWidth() - pauseButton.getWidth(),
+                Gdx.graphics.getHeight() - pauseButton.getHeight(), 100, 50);
+        pauseButton.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (state == State.RUN) {
+                    state = State.PAUSE;
+                    game.pause();
+                } else if (state == State.PAUSE) {
+                    state = State.RUN;
+                    game.resume();
+                }
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        stage.addActor(pauseButton);
+    }
+
     @Override
     void setBackgroundTexture() {
         super.setBackgroundTexture();
         createEndGameButton();
+        createPauseButton();
         stageKeyboardPrepare();
         actors.setStackEdges(backgroundTexture.getWidth());
     }

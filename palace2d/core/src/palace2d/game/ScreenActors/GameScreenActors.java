@@ -107,8 +107,16 @@ public class GameScreenActors {
         palaceHeight += newBlock.getHeight();
 
         newBlock.trim((int)width);
-        newBlock.spritePos(randBlockPosition(),
-                blocks.get(actualBlockNumber - 1).getTop() + dropHeight);
+        int rand = randBlockPosition();
+        Block block = blocks.get(actualBlockNumber - 1);
+        if (rand > 0) {
+            block.setLeft(false);
+        }
+        else {
+            block.setLeft(true);
+        }
+        newBlock.spritePos(rand,
+                block.getTop() + dropHeight);
 
         return newBlock;
     }
