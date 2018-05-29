@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import palace2d.game.Graphics.MIMTextureHandler;
 import palace2d.game.Graphics.PalaceTextureHandler;
 import palace2d.game.Graphics.TextureHandler;
 import palace2d.game.Palace2D;
@@ -26,7 +27,7 @@ public class SkinSelectScreen extends PalaceScreen {
         createImageButton("palace_button.png", new GameScreen(game,
                 new PalaceTextureHandler(), blockSpeed), PALACE_BUTT_X, PALACE_BUTT_Y);
         createImageButton("mim_button.png", new GameScreen(game,
-                new PalaceTextureHandler(), blockSpeed), MIM_BUTT_X, MIM_BUTT_Y);
+                new MIMTextureHandler(), blockSpeed), MIM_BUTT_X, MIM_BUTT_Y);
     }
 
     private void createImageButton(String texPath, PalaceScreen screen,
