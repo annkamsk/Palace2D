@@ -5,7 +5,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import de.tomgrill.gdxtesting.GdxTestRunner;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.runner.RunWith;
 import palace2d.game.Graphics.TextureHandler;
+import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.Block;
 import palace2d.game.ScreenActors.GameScreenActors;
 
@@ -25,6 +28,16 @@ public class GamesScreenActorsTest {
     private static final int TEST_DROP_HEIGHT = 20;
 
     private GameScreenActors actors;
+
+    @BeforeClass
+    public static void setUpTestMod() {
+        Palace2D.TEST_MOD = true;
+    }
+
+    @AfterClass
+    public static void restoreTestMod() {
+        Palace2D.TEST_MOD = false;
+    }
 
     @Before
     public void setUp() {

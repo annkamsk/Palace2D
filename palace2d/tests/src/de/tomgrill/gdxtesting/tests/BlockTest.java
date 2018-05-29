@@ -4,13 +4,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.badlogic.gdx.graphics.Texture;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.badlogic.gdx.Gdx;
 
 import de.tomgrill.gdxtesting.GdxTestRunner;
+import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.Block;
 
 @RunWith(GdxTestRunner.class)
@@ -18,6 +21,16 @@ public class BlockTest {
 
     private Block block;
     private Texture blockTexture;
+
+    @BeforeClass
+    public static void setUpTestMod() {
+        Palace2D.TEST_MOD = true;
+    }
+
+    @AfterClass
+    public static void restoreTestMod() {
+        Palace2D.TEST_MOD = false;
+    }
 
     @Before
     public void setUp() {

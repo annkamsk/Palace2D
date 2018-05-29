@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.*;
 
 public class GameScreenActors {
-    private static final int MAX_BLOCKS = 200;
+    private static final int MAX_BLOCKS = 20;
     private static final int INIT_BLOCK_WIDTH = 578; // px
     private static final int BONUS_BLOCK_AFTER = 3;
     private static final int BONUS_MAX_PX_DIFF = 100;
