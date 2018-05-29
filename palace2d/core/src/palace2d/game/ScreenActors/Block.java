@@ -1,11 +1,14 @@
 package palace2d.game.ScreenActors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.*;
 
 public class Block extends Actor {
+    private static final int INITIAL_BLOCK_WIDTH = 578; //px
+
     private Sprite sprite;
 
     private final int height;
@@ -13,6 +16,7 @@ public class Block extends Actor {
     public Block(Texture tex) {
         sprite = new Sprite(tex);
         height = tex.getHeight();
+        trim(INITIAL_BLOCK_WIDTH);
         spritePos(sprite.getX(), sprite.getY());
     }
 

@@ -19,7 +19,6 @@ import palace2d.game.Graphics.TextureHandler;
 public abstract class PalaceScreen implements Screen {
     private static final int NEWGAME_BUTTON_YPOSITION = 10; // px
     private static final int BUTTON_HEIGHT = 50; // px
-    private final String backgroundTextureFileName;
     Stage stage;
     Palace2D game;
     GameCamera camera;
@@ -29,7 +28,7 @@ public abstract class PalaceScreen implements Screen {
     TextureHandler textureHandler;
 
     // TODO wywalic backroundTexture
-    public PalaceScreen(Palace2D game, String backgroundTextureFileName,
+    public PalaceScreen(Palace2D game,
                         TextureHandler textureHandler) {
         this.game = game;
         this.camera = new GameCamera();
@@ -37,15 +36,13 @@ public abstract class PalaceScreen implements Screen {
         this.stage = new Stage(new FitViewport(Palace2D.V_WIDTH,
                 Palace2D.V_HEIGHT, this.camera.getCamera()));
         this.actors = new GameScreenActors(textureHandler);
-        this.backgroundTextureFileName = backgroundTextureFileName;
         this.textureHandler = textureHandler;
         setBackgroundTexture();
     }
 
 
     void setBackgroundTexture() {
-        backgroundTexture = TextureHandler.createTexture
-                (backgroundTextureFileName);
+        backgroundTexture = textureHandler.getBackgroundTexture();
 
         backgroundImg = TextureHandler.getActorFromTexture
                 (backgroundTexture, 0, 0,

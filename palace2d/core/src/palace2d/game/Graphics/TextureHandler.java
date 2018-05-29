@@ -17,6 +17,7 @@ import static palace2d.game.Palace2D.TEST_MOD;
 
 public abstract class TextureHandler {
     List<Texture> textures;
+    Texture backgroundTexture;
     int actualTextureNumber = 0;
     static Map<Integer, Predicate<Integer>> textureChangeHandlers;
 
@@ -25,6 +26,7 @@ public abstract class TextureHandler {
         textureChangeHandlers = new HashMap<>();
         initTextures(directoryName);
         initTextureChangeHandling();
+        setBackgroundTexture();
     }
 
     public void initTextures(String directoryName) {
@@ -48,6 +50,12 @@ public abstract class TextureHandler {
                     "Textures missing from core/assets/" + directoryName +
                     "directory.");
         }
+    }
+
+    abstract void setBackgroundTexture();
+
+    public Texture getBackgroundTexture() {
+        return backgroundTexture;
     }
 
     public int getActualTextureWidth() {
@@ -80,6 +88,8 @@ public abstract class TextureHandler {
      * be changed. Puts predicates in textureChangeHandlers map.
      */
     abstract void initTextureChangeHandling();
+
+    public abstract int getInitalBlockHeight();
 
     public Texture getActualTexture(int blockWidth) {
         if (isTextureChanging(blockWidth)) {

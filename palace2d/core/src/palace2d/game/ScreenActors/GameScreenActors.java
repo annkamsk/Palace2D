@@ -11,10 +11,8 @@ import java.util.*;
 public class GameScreenActors {
     private static final int MAX_BLOCKS = 20;
     private static final int INIT_BLOCK_WIDTH = 578; // px
-    private static final int BONUS_BLOCK_AFTER = 3;
+    private static final int BONUS_BLOCK_AFTER = 10;
     private static final int BONUS_MAX_PX_DIFF = 100;
-
-    public final int BLOCK_HEIGHT = 60; //px
 
     private static int actualStackLeftEdge; // px
     private static int actualStackRightEdge; // px
@@ -38,7 +36,7 @@ public class GameScreenActors {
     public void initGameBlocks() {
         Block newBlock = new Block(textureHandler.getActualTexture(getBlockWidth()));
         blocks.add(newBlock);
-        palaceHeight = BLOCK_HEIGHT;
+        palaceHeight = textureHandler.getInitalBlockHeight();
         newBlock.spritePos(newBlock.getX(), newBlock.getY());
     }
 

@@ -3,10 +3,17 @@ package palace2d.game.Graphics;
 import java.util.*;
 
 public class MIMTextureHandler extends TextureHandler {
+    private static final int INITIAL_BLOCK_HEIGHT = 25; // px
+
 
     public MIMTextureHandler() {
         super("mim");
     }
+
+    public int getInitalBlockHeight() {
+        return INITIAL_BLOCK_HEIGHT;
+    }
+
 
     void initTextureChangeHandling() {
         // textures used for only one block
@@ -24,6 +31,10 @@ public class MIMTextureHandler extends TextureHandler {
          blockWidth -> blockWidth < getActualTextureWidth() - 100));
 
         textureChangeHandlers.put(textures.size() - 1, (blockWidth) -> false);
+    }
+
+    void setBackgroundTexture() {
+        backgroundTexture = createTexture("background_mim.png");
     }
 
 

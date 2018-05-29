@@ -30,7 +30,7 @@ public class GameScreen extends PalaceScreen {
     private Container<Label> bonusBlockLabel;
 
     public GameScreen(Palace2D game, TextureHandler textureHandler) {
-        super(game, "background.png", textureHandler);
+        super(game, textureHandler);
         createGameObjects();
     }
 
@@ -63,7 +63,7 @@ public class GameScreen extends PalaceScreen {
         bonusBlockLabel.setOrigin(bonusBlockLabel.getWidth() / 2,
                 bonusBlockLabel.getHeight() / 2);
         bonusBlockLabel.setPosition(Gdx.graphics.getWidth() / 2 - bonusBlockLabel.getWidth() / 2,
-                5 * actors.BLOCK_HEIGHT + 150);
+                5 * textureHandler.getInitalBlockHeight() + 150);
         bonusBlockLabel.setVisible(false);
         stage.addActor(bonusBlockLabel);
     }
@@ -120,7 +120,7 @@ public class GameScreen extends PalaceScreen {
                                     }
                             ));
 
-                    if (myBlock.getY() > 3 * actors.BLOCK_HEIGHT) {
+                    if (myBlock.getY() > 3 * textureHandler.getInitalBlockHeight()) {
                         moveView(0f, actors.getBlockHeight());
                     }
 
