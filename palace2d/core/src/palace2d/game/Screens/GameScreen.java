@@ -27,7 +27,10 @@ public class GameScreen extends PalaceScreen {
     private int LOST = -1;
     private int GAVEUP = 0;
 
+    private int score = 0;
+
     private TextButton endButton;
+    private Label scoreLabel;
     private Container<Label> bonusBlockLabel;
     private float blockMoveDuration = 0.8f;
 
@@ -55,6 +58,7 @@ public class GameScreen extends PalaceScreen {
         createBonusBlockLabel();
         initGameBlocks();
         setActors();
+        setScoreLabel();
     }
 
     private void createBonusBlockLabel() {
@@ -66,16 +70,32 @@ public class GameScreen extends PalaceScreen {
         bonusBlockLabel.setSize(100, 60); // TODO jakos ladnie te px zrobic
         bonusBlockLabel.setOrigin(bonusBlockLabel.getWidth() / 2,
                 bonusBlockLabel.getHeight() / 2);
-        bonusBlockLabel.setPosition(Gdx.graphics.getWidth() / 2 - bonusBlockLabel.getWidth() / 2,
+        bonusBlockLabel.setPosition(
+                Gdx.graphics.getWidth() / 2 - bonusBlockLabel.getWidth() / 2,
                 5 * textureHandler.getInitalBlockHeight() + 150);
         bonusBlockLabel.setVisible(false);
         stage.addActor(bonusBlockLabel);
     }
 
     private void showBonusBlockLabelAction() {
-        SequenceAction seq = new SequenceAction(Actions.show(), Actions.scaleTo(2f, 2f, 0.75f),
+        SequenceAction seq = new SequenceAction(Actions.show(),
+                Actions.scaleTo(2f, 2f, 0.75f),
                 Actions.scaleTo(1f, 1f, 0.75f), Actions.hide());
         bonusBlockLabel.addAction(seq);
+    }
+
+    private void setScoreLabel() {
+        scoreLabel = new Label(textureHandler.getScoreLabelText() + score, new
+                Skin(Gdx.files
+                .internal("skins/glassy/skin/glassy-ui.json")));
+        scoreLabel.setX(5);
+        scoreLabel.setFontScale(0.8f);
+        stage.addActor(scoreLabel);
+    }
+
+    private void increaseScore() {
+        ++score;
+        scoreLabel.setText(textureHandler.getScoreLabelText() + score);
     }
 
     private void setActors() {
@@ -113,7 +133,8 @@ public class GameScreen extends PalaceScreen {
                     myBlock.addAction(
                             Actions.sequence(
                                     Actions.moveTo(myBlock.getX(),
-                                            myBlock.getY() - DROP_HEIGHT, BLOCK_DROP_DURATION)
+                                            myBlock.getY() - DROP_HEIGHT,
+                                            BLOCK_DROP_DURATION)
                                     , new Action() {
                                         @Override
                                         public boolean act(float delta) {
@@ -125,9 +146,11 @@ public class GameScreen extends PalaceScreen {
                             ));
 
                     if ((textureHandler instanceof MIMTextureHandler &&
-                            myBlock.getY() > 10 * textureHandler.getInitalBlockHeight()) ||
-                            (textureHandler instanceof PalaceTextureHandler &&
-                                    myBlock.getY() > 4 * textureHandler.getInitalBlockHeight())) {
+                         myBlock.getY() >
+                         10 * textureHandler.getInitalBlockHeight()) ||
+                        (textureHandler instanceof PalaceTextureHandler &&
+                         myBlock.getY() >
+                         4 * textureHandler.getInitalBlockHeight())) {
                         moveView(0f, actors.getBlockHeight());
                     }
 
@@ -142,13 +165,18 @@ public class GameScreen extends PalaceScreen {
         SequenceAction overallSequence = new SequenceAction();
 
         if (block.getX() > 0) {
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
-            overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), blockMoveDuration));
-        } else {
-            overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), blockMoveDuration));
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
+            overallSequence.addAction(
+                    Actions.moveTo(0, block.getY(), blockMoveDuration));
+            overallSequence.addAction(
+                    Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
+                            block.getY(), blockMoveDuration));
+        }
+        else {
+            overallSequence.addAction(
+                    Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
+                            block.getY(), blockMoveDuration));
+            overallSequence.addAction(
+                    Actions.moveTo(0, block.getY(), blockMoveDuration));
         }
 
         RepeatAction infiniteLoop = new RepeatAction();
@@ -164,20 +192,22 @@ public class GameScreen extends PalaceScreen {
         if (gameContinues()) {
             Gdx.app.log("info",
                     "I DROPPED BLOCK NR " + (actors.getActualBlockNumber()));
-
+            increaseScore();
             makeBlockReady(actors.setNewBlock(DROP_HEIGHT));
             setActualActor();
 
-        } else {
+        }
+        else {
             if (gameWon()) {
                 Gdx.app.log("info", "YOU WIN");
                 Gdx.app.log("info", "YOU LOSE");
-                game.setScreen(new EndGameScreen(game, actors
-                        .getActualBlockNumber() - 1, WON, actors, textureHandler));
-            } else {
+                game.setScreen(new EndGameScreen(game, score, WON, actors,
+                        textureHandler));
+            }
+            else {
                 Gdx.app.log("info", "YOU LOSE");
-                game.setScreen(new EndGameScreen(game, actors
-                        .getActualBlockNumber() - 1, LOST, actors, textureHandler));
+                game.setScreen(new EndGameScreen(game, score, LOST, actors,
+                        textureHandler));
             }
         }
     }
@@ -188,7 +218,8 @@ public class GameScreen extends PalaceScreen {
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                Gdx.app.log("Image ClickListener", "keyDown. keycode=" + keycode);
+                Gdx.app.log("Image ClickListener",
+                        "keyDown. keycode=" + keycode);
                 return true;
             }
         });
@@ -202,13 +233,15 @@ public class GameScreen extends PalaceScreen {
                 Gdx.graphics.getHeight() - endButton.getHeight(), 100, 50);
         endButton.addListener(new InputListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new EndGameScreen(game, actors
-                        .getActualBlockNumber() - 1, GAVEUP, actors, textureHandler));
+            public void touchUp(InputEvent event, float x, float y, int pointer,
+                                int button) {
+                game.setScreen(new EndGameScreen(game, score, GAVEUP, actors,
+                        textureHandler));
             }
 
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
                 return true;
             }
         });
@@ -228,6 +261,7 @@ public class GameScreen extends PalaceScreen {
         backgroundImg.addAction(Actions.moveBy(x, y));
         endButton.addAction(Actions.moveBy(x, y));
         bonusBlockLabel.addAction(Actions.moveBy(x, y));
+        scoreLabel.addAction(Actions.moveBy(x, y));
     }
 
 

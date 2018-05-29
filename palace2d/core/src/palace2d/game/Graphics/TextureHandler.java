@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -84,7 +86,7 @@ public abstract class TextureHandler {
     }
 
     /**
-     * Creates predicates for each texture deciding when the texture should
+     * For each texture creates predicates deciding when the texture should
      * be changed. Puts predicates in textureChangeHandlers map.
      */
     abstract void initTextureChangeHandling();
@@ -100,6 +102,14 @@ public abstract class TextureHandler {
 
     private boolean isTextureChanging(int blockWidth) {
         return textureChangeHandlers.get(actualTextureNumber).test(blockWidth);
+    }
+
+    public String getScoreLabelText() {
+        return "SCORE: ";
+    }
+
+    public String getFinalScoreLabelText() {
+        return "YOUR SCORE: ";
     }
 
 }
