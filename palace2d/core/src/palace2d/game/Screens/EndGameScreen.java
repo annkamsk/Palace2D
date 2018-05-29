@@ -16,9 +16,9 @@ import java.util.List;
 
 public class EndGameScreen extends PalaceScreen {
     private static final int TOP10_LABEL_YPOSITION = 130; // px
-    private static final float PALACE_VIEW_HEIGHT = 550; // px
-    private static final float PALACE_VIEW_WIDTH = 320; // px
-    private static final int PALACE_VIEW_YPOSTION = 20; // px
+    private static final float PALACE_VIEW_HEIGHT = 529; // px
+    private static final float PALACE_VIEW_WIDTH = 250; // px
+    private static final int PALACE_VIEW_YPOSTION = 70; // px
 
     private ScoreBoard scoreBoard;
     private TextButton saveTop10;
@@ -48,12 +48,14 @@ public class EndGameScreen extends PalaceScreen {
         saveTop10 = new TextButton("SAVE YOUR SCORE", new Skin(Gdx.files
                 .internal("skins/glassy/skin/glassy-ui.json")), "small");
 
-        saveTop10.setBounds(Gdx.graphics.getWidth() / 2 - saveTop10.getWidth() / 2,
+        saveTop10.setBounds(
+                Gdx.graphics.getWidth() / 2 - saveTop10.getWidth() / 2,
                 70, saveTop10.getWidth(), 50);
 
         saveTop10.addListener(new InputListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer,
+                                int button) {
                 Gdx.input.getTextInput(new Input.TextInputListener() {
                     @Override
                     public void input(String username) {
@@ -71,7 +73,8 @@ public class EndGameScreen extends PalaceScreen {
             }
 
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
                 return true;
             }
         });
@@ -82,6 +85,7 @@ public class EndGameScreen extends PalaceScreen {
         String title = "YOUR SCORE: " + String.valueOf(currentScore);
         Label label = new Label(title, new Skin(Gdx.files
                 .internal("skins/glassy/skin/glassy-ui.json")));
+        label.setPosition(10, 5);
         stage.addActor(label);
     }
 
@@ -89,7 +93,8 @@ public class EndGameScreen extends PalaceScreen {
         String top10Message;
         if (scoreBoard.isInTop10()) {
             top10Message = "YOU ARE IN TOP 10!";
-        } else {
+        }
+        else {
             top10Message = "SORRY, YOU'RE NOT IN TOP 10";
         }
         Label top10 = new Label(top10Message, new Skin(Gdx.files
@@ -105,16 +110,15 @@ public class EndGameScreen extends PalaceScreen {
                 .getPalaceHeight(), PALACE_VIEW_WIDTH / actors
                 .getPalaceWidth()));
 
-        Gdx.app.log("info", Float.toString(ratio));
-
         float YPosition = 0;
         for (Iterator<Block> iter = actors.getBlocksIterator(); iter.hasNext
                 (); ) {
             Block block = iter.next();
-            block.setPosition(block.getX() / Palace2D.V_WIDTH * PALACE_VIEW_WIDTH,
-                    PALACE_VIEW_YPOSTION + block.getY() - YPosition);
             YPosition += block.getHeight() - block.getHeight() * ratio;
             block.scale(ratio);
+            block.spritePos(block.getX() / Palace2D.V_WIDTH *
+                            PALACE_VIEW_WIDTH,
+                    PALACE_VIEW_YPOSTION + block.getY() - YPosition);
             if (iter.hasNext()) {
                 stage.addActor(block);
             }
