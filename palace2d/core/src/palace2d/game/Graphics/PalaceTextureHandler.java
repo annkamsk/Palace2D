@@ -1,47 +1,18 @@
 package palace2d.game.Graphics;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import palace2d.game.Palace2D;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.stream.Stream;
-
-import static palace2d.game.Palace2D.TEST_MOD;
-
 public class PalaceTextureHandler extends TextureHandler {
+    private static final int INITIAL_BLOCK_HEIGHT = 60; // px
 
     public PalaceTextureHandler() {
-        super();
+        super("blocks");
     }
 
-    public void initTextures() {
-        String path = "blocks";
-
-        if (TEST_MOD) {
-            path = "../core/assets/blocks";
-        }
-
-        try (Stream<Path> paths = Files.walk(Paths.get(path)
-        )) {
-            paths
-                    .filter(Files::isRegularFile)
-                    .forEach((file) -> textures.add(createTexture(file
-                            .toString())));
-
-            /* sort textures according to their file name */
-            Collections.sort(textures, Comparator.comparing(Object::toString));
-        } catch (IOException e) {
-            Gdx.app.log("info",
-                    "Block textures missing from core/assets/blocks directory" +
-                    ".");
-        }
+    public int getInitalBlockHeight() {
+        return INITIAL_BLOCK_HEIGHT;
     }
+
 
     void initTextureChangeHandling() {
         textureChangeHandlers.put(0, (blockWidth) -> true);
@@ -57,15 +28,13 @@ public class PalaceTextureHandler extends TextureHandler {
         textureChangeHandlers.put(textures.size() - 1, (blockWidth) -> false);
     }
 
-
-    public Texture getActualTexture(int blockWidth) {
-        if (isTextureChanging(blockWidth)) {
-            return textures.get(++actualTextureNumber);
+    void setBackgroundTexture() {
+        String filename = "background.png";
+        if (Palace2D.TEST_MOD) {
+            filename = "../core/assets/" + filename;
         }
-        return textures.get(actualTextureNumber);
+
+        backgroundTexture = createTexture(filename);
     }
 
-    private boolean isTextureChanging(int blockWidth) {
-        return textureChangeHandlers.get(actualTextureNumber).test(blockWidth);
-    }
 }
