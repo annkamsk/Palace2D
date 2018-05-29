@@ -27,7 +27,6 @@ public abstract class PalaceScreen implements Screen {
     Image backgroundImg;
     TextureHandler textureHandler;
 
-    // TODO wywalic backroundTexture
     public PalaceScreen(Palace2D game,
                         TextureHandler textureHandler) {
         this.game = game;
