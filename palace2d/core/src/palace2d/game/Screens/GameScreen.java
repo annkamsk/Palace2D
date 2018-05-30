@@ -299,7 +299,7 @@ public class GameScreen extends PalaceScreen {
                     state = State.PAUSE;
                     game.pause();
                 } else if (state == State.PAUSE) {
-                    if (!music.isPlaying())
+                    if (!music.isPlaying() && soundPreference())
                         music.play();
                     state = State.RUN;
                     game.resume();
