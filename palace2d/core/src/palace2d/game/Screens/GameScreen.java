@@ -39,6 +39,7 @@ public class GameScreen extends PalaceScreen {
     private State state = State.RUN;
     private TextButton endButton;
     private TextButton pauseButton;
+    private TextButton soundButton;
     private Label scoreLabel;
     private int score = 0;
     private static Music music;
@@ -73,18 +74,20 @@ public class GameScreen extends PalaceScreen {
     @Override
     public void pause() {
         actors.getActualBlock().clearActions();
+        pauseButton.setText("UNPAUSE");
     }
 
     @Override
     public void resume() {
         Block block = actors.getActualBlock();
         block.addAction(sideToSideAction(block));
+        pauseButton.setText("PAUSE");
     }
 
-    private void initMusic() {
+    public void initMusic() {
         music.setVolume(0.5f);
         music.setLooping(true);
-        if (!music.isPlaying())
+        if (!music.isPlaying() && soundPreference())
             music.play();
     }
 
@@ -94,7 +97,6 @@ public class GameScreen extends PalaceScreen {
         initGameBlocks();
         setActors();
         setScoreLabel();
-        initMusic();
     }
 
 
@@ -235,7 +237,6 @@ public class GameScreen extends PalaceScreen {
         else {
             if (gameWon()) {
                 Gdx.app.log("info", "YOU WIN");
-                Gdx.app.log("info", "YOU LOSE");
                 game.setScreen(new EndGameScreen(game, score, WON, actors,
                         textureHandler));
             }
@@ -313,11 +314,59 @@ public class GameScreen extends PalaceScreen {
         stage.addActor(pauseButton);
     }
 
+    private void createSoundButton() {
+        soundButton = new TextButton("SOUND OFF", new Skin(Gdx.files.internal
+                        ("skins/glassy/skin/glassy-ui.json")), "small");
+        soundButton.setBounds(pauseButton.getX() - 5,
+                pauseButton.getY() - soundButton.getHeight() - 10, 110, 50);
+        if (!soundPreference())
+            soundButton.setText("SOUND ON");
+        soundButton.addListener(new InputListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (soundPreference()) {
+                    if (music.isPlaying() && state == State.RUN) {
+                        music.pause();
+                        setSoundPreference(false);
+                        soundButton.setText("SOUND ON");
+                    }
+                }
+                else {
+                    if (!music.isPlaying() && state == State.RUN) {
+                        music.play();
+                        setSoundPreference(true);
+                        soundButton.setText("SOUND OFF");
+                    }
+
+                }
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        stage.addActor(soundButton);
+    }
+
+    private boolean soundPreference(){
+        Preferences prefs = Gdx.app.getPreferences("MyPreferences");
+        String soundOn = prefs.getString("soundOn", "true");
+        return Boolean.parseBoolean(soundOn);
+    }
+
+    private void setSoundPreference(boolean soundOn) {
+        Preferences prefs = Gdx.app.getPreferences("MyPreferences");
+        prefs.putBoolean("soundOn", soundOn);
+        prefs.flush();
+    }
+
     @Override
     void setBackgroundTexture() {
         super.setBackgroundTexture();
         createEndGameButton();
         createPauseButton();
+        createSoundButton();
         stageKeyboardPrepare();
         actors.setStackEdges(backgroundTexture.getWidth());
     }
@@ -327,6 +376,7 @@ public class GameScreen extends PalaceScreen {
         backgroundImg.addAction(Actions.moveBy(x, y));
         endButton.addAction(Actions.moveBy(x, y));
         pauseButton.addAction(Actions.moveBy(x, y));
+        soundButton.addAction(Actions.moveBy(x,y));
         bonusBlockLabel.addAction(Actions.moveBy(x, y));
         scoreLabel.addAction(Actions.moveBy(x, y));
     }
