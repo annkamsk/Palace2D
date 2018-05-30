@@ -24,14 +24,11 @@ public class GameScreen extends PalaceScreen {
     private static final float BLOCK_DROP_DURATION = 0.25f;
     private static final float CAMERA_SMOOTH = 1f;
 
-    // TODO przerobić na klasy stan, w których będą przechowywane funkcje
-    // wyświetlające komunikaty
-    private int WON = 1;
-    private int LOST = -1;
-    private int GAVEUP = 0;
+    private static final String WON_MESSAGE = "YOU WON!";
+    private static final String LOST_MESSAGE = "SORRY, YOU LOST";
+    private static final String GAVEUP_MESSAGE = "WHY GIVING UP?";
 
-    public enum State
-    {
+    public enum State {
         PAUSE,
         RUN
     }
@@ -87,8 +84,9 @@ public class GameScreen extends PalaceScreen {
     public void initMusic() {
         music.setVolume(0.5f);
         music.setLooping(true);
-        if (!music.isPlaying() && soundPreference())
+        if (!music.isPlaying() && soundPreference()) {
             music.play();
+        }
     }
 
     private void createGameObjects() {
@@ -204,13 +202,18 @@ public class GameScreen extends PalaceScreen {
         SequenceAction overallSequence = new SequenceAction();
 
         if (block.isRight()) {
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
-            overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), blockMoveDuration));
-        } else {
-            overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
-                    block.getY(), blockMoveDuration));
-            overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
+            overallSequence.addAction(
+                    Actions.moveTo(0, block.getY(), blockMoveDuration));
+            overallSequence.addAction(
+                    Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
+                            block.getY(), blockMoveDuration));
+        }
+        else {
+            overallSequence.addAction(
+                    Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
+                            block.getY(), blockMoveDuration));
+            overallSequence.addAction(
+                    Actions.moveTo(0, block.getY(), blockMoveDuration));
         }
 
         RepeatAction infiniteLoop = new RepeatAction();
@@ -234,12 +237,14 @@ public class GameScreen extends PalaceScreen {
         else {
             if (gameWon()) {
                 Gdx.app.log("info", "YOU WIN");
-                game.setScreen(new EndGameScreen(game, score, WON, actors,
+                game.setScreen(new EndGameScreen(game, score, WON_MESSAGE,
+                        actors,
                         textureHandler));
             }
             else {
                 Gdx.app.log("info", "YOU LOSE");
-                game.setScreen(new EndGameScreen(game, score, LOST, actors,
+                game.setScreen(new EndGameScreen(game, score, LOST_MESSAGE,
+                        actors,
                         textureHandler));
             }
         }
@@ -251,7 +256,8 @@ public class GameScreen extends PalaceScreen {
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                Gdx.app.log("Image ClickListener", "keyDown. keycode=" + keycode + ", state=" + state);
+                Gdx.app.log("Image ClickListener",
+                        "keyDown. keycode=" + keycode + ", state=" + state);
 
                 return true;
             }
@@ -268,8 +274,9 @@ public class GameScreen extends PalaceScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer,
                                 int button) {
-                game.setScreen(new EndGameScreen(game, score, GAVEUP, actors,
-                        textureHandler));
+                game.setScreen(
+                        new EndGameScreen(game, score, GAVEUP_MESSAGE, actors,
+                                textureHandler));
             }
 
             @Override
@@ -289,22 +296,27 @@ public class GameScreen extends PalaceScreen {
                 Gdx.graphics.getHeight() - pauseButton.getHeight(), 100, 50);
         pauseButton.addListener(new InputListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer,
+                                int button) {
                 if (state == State.RUN) {
-                    if (music.isPlaying())
+                    if (music.isPlaying()) {
                         music.pause();
+                    }
                     state = State.PAUSE;
                     game.pause();
-                } else if (state == State.PAUSE) {
-                    if (!music.isPlaying() && soundPreference())
+                }
+                else if (state == State.PAUSE) {
+                    if (!music.isPlaying() && soundPreference()) {
                         music.play();
+                    }
                     state = State.RUN;
                     game.resume();
                 }
             }
 
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
                 return true;
             }
         });
@@ -313,14 +325,16 @@ public class GameScreen extends PalaceScreen {
 
     private void createSoundButton() {
         soundButton = new TextButton("SOUND OFF", new Skin(Gdx.files.internal
-                        ("skins/glassy/skin/glassy-ui.json")), "small");
+                ("skins/glassy/skin/glassy-ui.json")), "small");
         soundButton.setBounds(pauseButton.getX() - 5,
                 pauseButton.getY() - soundButton.getHeight() - 10, 110, 50);
-        if (!soundPreference())
+        if (!soundPreference()) {
             soundButton.setText("SOUND ON");
+        }
         soundButton.addListener(new InputListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void touchUp(InputEvent event, float x, float y, int pointer,
+                                int button) {
                 if (soundPreference()) {
                     if (music.isPlaying() && state == State.RUN) {
                         music.pause();
@@ -339,14 +353,15 @@ public class GameScreen extends PalaceScreen {
             }
 
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y,
+                                     int pointer, int button) {
                 return true;
             }
         });
         stage.addActor(soundButton);
     }
 
-    private boolean soundPreference(){
+    private boolean soundPreference() {
         Preferences prefs = Gdx.app.getPreferences("MyPreferences");
         String soundOn = prefs.getString("soundOn", "true");
         return Boolean.parseBoolean(soundOn);
@@ -373,7 +388,7 @@ public class GameScreen extends PalaceScreen {
         backgroundImg.addAction(Actions.moveBy(x, y));
         endButton.addAction(Actions.moveBy(x, y));
         pauseButton.addAction(Actions.moveBy(x, y));
-        soundButton.addAction(Actions.moveBy(x,y));
+        soundButton.addAction(Actions.moveBy(x, y));
         bonusBlockLabel.addAction(Actions.moveBy(x, y));
         scoreLabel.addAction(Actions.moveBy(x, y));
     }
