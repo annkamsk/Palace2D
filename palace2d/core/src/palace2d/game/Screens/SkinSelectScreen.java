@@ -30,7 +30,7 @@ public class SkinSelectScreen extends PalaceScreen {
                 new MIMTextureHandler(), blockSpeed), MIM_BUTT_X, MIM_BUTT_Y);
     }
 
-    private void createImageButton(String texPath, PalaceScreen screen,
+    private void createImageButton(String texPath, GameScreen screen,
                                    float x, float y) {
         Texture buttonTexture = new Texture(Gdx.files.internal(texPath));
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
@@ -42,6 +42,7 @@ public class SkinSelectScreen extends PalaceScreen {
             public void touchUp(InputEvent event, float x, float y, int pointer,
                                 int button) {
                 game.setScreen(screen);
+                screen.initMusic();
             }
 
             @Override
