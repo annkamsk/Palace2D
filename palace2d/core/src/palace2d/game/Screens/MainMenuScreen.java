@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
@@ -25,11 +23,8 @@ public class MainMenuScreen extends PalaceScreen {
     private static final float BIRD_MOVE_DURATION = 1.8f;
 
     private List<Bird> birds;
-    private Animation<TextureRegion> walkAnimation;
-    TextureRegion[] walkFrames;
-    SpriteBatch spriteBatch;
+    private TextureRegion[] walkFrames;
 
-    private float stateTime;
     private Random generator;
 
     public MainMenuScreen(final Palace2D game, TextureHandler textureHandler) {
@@ -64,9 +59,6 @@ public class MainMenuScreen extends PalaceScreen {
                 walkFrames[index++] = tmp[i][j];
             }
         }
-        walkAnimation = new Animation<>(0.050f, walkFrames);
-        stateTime = 0f;
-        spriteBatch = new SpriteBatch();
     }
 
     private void setPalaceImage() {
