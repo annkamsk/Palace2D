@@ -293,9 +293,13 @@ public class GameScreen extends PalaceScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (state == State.RUN) {
+                    if (music.isPlaying())
+                        music.pause();
                     state = State.PAUSE;
                     game.pause();
                 } else if (state == State.PAUSE) {
+                    if (!music.isPlaying())
+                        music.play();
                     state = State.RUN;
                     game.resume();
                 }
