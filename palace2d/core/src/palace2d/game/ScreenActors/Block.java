@@ -12,21 +12,15 @@ public class Block extends Actor {
 
     private final int height;
 
-    public boolean getLeft() {
-        return left;
-    }
-
-    public void setLeft(boolean left) {
-        this.left = left;
-    }
-
-    private boolean left = false;
-
     public Block(Texture tex) {
         sprite = new Sprite(tex);
         height = tex.getHeight();
         trim(INITIAL_BLOCK_WIDTH);
         spritePos(sprite.getX(), sprite.getY());
+    }
+
+    public boolean isRight() {
+        return this.getX() > 0;
     }
 
     public void trim(int width) {

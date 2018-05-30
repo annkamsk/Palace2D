@@ -109,14 +109,7 @@ public class GameScreenActors {
         newBlock.trim((int)width);
         int rand = randBlockPosition();
         Block block = blocks.get(actualBlockNumber - 1);
-        if (rand > 0) {
-            block.setLeft(false);
-        }
-        else {
-            block.setLeft(true);
-        }
-        newBlock.spritePos(rand,
-                block.getTop() + dropHeight);
+        newBlock.spritePos(rand, block.getTop() + dropHeight);
 
         return newBlock;
     }

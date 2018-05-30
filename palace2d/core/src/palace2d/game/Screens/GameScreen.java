@@ -203,17 +203,14 @@ public class GameScreen extends PalaceScreen {
     private Action sideToSideAction(Block block) {
         SequenceAction overallSequence = new SequenceAction();
 
-        if (!block.getLeft()) {
+        if (block.isRight()) {
             overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
             overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
                     block.getY(), blockMoveDuration));
-            block.setLeft(true);
         } else {
             overallSequence.addAction(Actions.moveTo(Palace2D.V_WIDTH - block.getWidth(),
                     block.getY(), blockMoveDuration));
             overallSequence.addAction(Actions.moveTo(0, block.getY(), blockMoveDuration));
-            block.setLeft(false);
-
         }
 
         RepeatAction infiniteLoop = new RepeatAction();
