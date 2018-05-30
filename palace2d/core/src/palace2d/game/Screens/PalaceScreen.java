@@ -17,6 +17,7 @@ import palace2d.game.Palace2D;
 import palace2d.game.ScreenActors.GameScreenActors;
 import palace2d.game.Graphics.TextureHandler;
 
+
 public abstract class PalaceScreen implements Screen {
     private static final int BACK_BUTTON_YPOSITION = 10; // px
     private static final int BACK_BUTTON_HEIGHT = 50; // px
@@ -32,6 +33,7 @@ public abstract class PalaceScreen implements Screen {
     Image backgroundImg;
     TextureHandler textureHandler;
 
+
     public PalaceScreen(Palace2D game,
                         TextureHandler textureHandler) {
         this.game = game;
@@ -42,8 +44,8 @@ public abstract class PalaceScreen implements Screen {
         this.actors = new GameScreenActors(textureHandler);
         this.textureHandler = textureHandler;
         setBackgroundTexture();
-    }
 
+    }
 
     void setBackgroundTexture() {
         backgroundTexture = textureHandler.getBackgroundTexture();

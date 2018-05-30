@@ -7,11 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.audio.Music;
+
 import palace2d.game.Graphics.MIMTextureHandler;
 import palace2d.game.Graphics.PalaceTextureHandler;
 import palace2d.game.Graphics.TextureHandler;
 import palace2d.game.ScreenActors.Block;
 import palace2d.game.Palace2D;
+
 
 import java.util.Iterator;
 
@@ -37,8 +40,9 @@ public class GameScreen extends PalaceScreen {
     private TextButton endButton;
     private TextButton pauseButton;
     private Label scoreLabel;
-  
     private int score = 0;
+    private static Music music;
+    private static boolean MUSIC_DONE = false;
 
     private Container<Label> bonusBlockLabel;
     private float blockMoveDuration = 0.8f;
@@ -46,6 +50,10 @@ public class GameScreen extends PalaceScreen {
     public GameScreen(Palace2D game, TextureHandler textureHandler,
                       float blockMoveDuration) {
         super(game, textureHandler);
+        if (!MUSIC_DONE) {
+            music = Gdx.audio.newMusic(Gdx.files.internal("music/music.mp3"));
+            MUSIC_DONE = true;
+        }
         this.blockMoveDuration = blockMoveDuration;
         createGameObjects();
     }
@@ -73,13 +81,22 @@ public class GameScreen extends PalaceScreen {
         block.addAction(sideToSideAction(block));
     }
 
-    void createGameObjects() {
+    private void initMusic() {
+        music.setVolume(0.5f);
+        music.setLooping(true);
+        if (!music.isPlaying())
+            music.play();
+    }
+
+    private void createGameObjects() {
         setBackgroundTexture();
         createBonusBlockLabel();
         initGameBlocks();
         setActors();
         setScoreLabel();
+        initMusic();
     }
+
 
     private void createBonusBlockLabel() {
         String title = "BONUS BLOCK SIZE ACTIVATED!";
@@ -276,9 +293,13 @@ public class GameScreen extends PalaceScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (state == State.RUN) {
+                    if (music.isPlaying())
+                        music.pause();
                     state = State.PAUSE;
                     game.pause();
                 } else if (state == State.PAUSE) {
+                    if (!music.isPlaying())
+                        music.play();
                     state = State.RUN;
                     game.resume();
                 }

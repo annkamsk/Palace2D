@@ -6,13 +6,9 @@ public class MIMTextureHandler extends TextureHandler {
     private static final int INITIAL_BLOCK_HEIGHT = 25; // px
 
 
-    public MIMTextureHandler() {
-        super("mim");
-    }
+    public MIMTextureHandler() { super("mim"); }
 
-    public int getInitalBlockHeight() {
-        return INITIAL_BLOCK_HEIGHT;
-    }
+    public int getInitalBlockHeight() { return INITIAL_BLOCK_HEIGHT; }
 
 
     void initTextureChangeHandling() {
