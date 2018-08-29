@@ -1,4 +1,5 @@
 # IOTower
+![Palace2D](https://github.com/annkamsk/palace2D/blob/master/graphics/poster.png?raw=true "Title")
 
 ## Generowanie dokumentacji
 
