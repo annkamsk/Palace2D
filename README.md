@@ -1,4 +1,6 @@
 # Palace2D
+Game produced using: Java 8, [LibGDX](https://libgdx.badlogicgames.com/), gradle, mockito, JUnit 
+
 ![Palace2D](https://github.com/annkamsk/palace2D/blob/master/graphics/poster.png?raw=true "Title")
 
 ## Pictures
